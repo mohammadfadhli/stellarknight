@@ -4,6 +4,7 @@ import {
     onAuthStateChanged,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    updateProfile,
 } from "firebase/auth";
 
 export const AuthContext = createContext();
@@ -13,46 +14,19 @@ export function AuthProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
 
     function logOut() {
-        return auth.signOut()
-            .then(() => {
-                console.log("Signed Out");
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorMessage);
-            });
+        return auth.signOut();
     }
 
     function logIn(email, password) {
-        return signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("signed in");
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorMessage);
-            });
+        return signInWithEmailAndPassword(auth, email, password);
     }
 
     function createUser(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("Successfully registered");
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log("failed to register");
-                // ..
-            });
+        return createUserWithEmailAndPassword(auth, email, password);
+    }
+
+    function updateUserName(params) {
+        return updateProfile(auth.currentUser, params);
     }
 
     useEffect(() => {
@@ -62,7 +36,7 @@ export function AuthProvider({ children }) {
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 const uid = user.uid;
                 console.log(uid + " is signed in");
-                setCurrentUser(uid);
+                setCurrentUser(user);
                 setIsLoading(false);
                 // ...
             } else {
@@ -75,7 +49,16 @@ export function AuthProvider({ children }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser, isLoading, logOut, logIn, createUser }}>
+        <AuthContext.Provider
+            value={{
+                currentUser,
+                isLoading,
+                logOut,
+                logIn,
+                createUser,
+                updateUserName,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

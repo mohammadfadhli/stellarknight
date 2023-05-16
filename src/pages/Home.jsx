@@ -15,7 +15,7 @@ function WelcomeBar() {
         return (
             <>
                 <div className="container mt-5">
-                    <h1>Welcome back, + {currentUser}</h1>
+                    <h1>Welcome Back, {currentUser.displayName}!</h1>
                 </div>
             </>
         );

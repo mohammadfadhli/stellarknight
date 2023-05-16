@@ -1,17 +1,25 @@
 import "../styles/Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
 
 function SignUpCard() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUserName] = useState("");
+    const navigate = useNavigate();
 
-    const {createUser} = useContext(AuthContext)
+    const {createUser, updateUserName} = useContext(AuthContext)
 
-    function signUp(e) {
+    async function signUp(e) {
         e.preventDefault();
-        createUser(email, password)
+        try {
+            await createUser(email, password);
+            await updateUserName({displayName: username})
+            navigate("/");
+        } catch (error) {
+            console.log(error.code)
+        }
     }
 
     return (
@@ -34,6 +42,18 @@ function SignUpCard() {
                         <div id="emailHelp" className="form-text">
                             We'll never share your email with anyone else.
                         </div>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputUserName1" className="form-label">
+                            Username
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="exampleInputUserName1"
+                            onChange={(e) => setUserName(e.target.value)}
+                            required
+                        />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="exampleInputPassword1" className="form-label">

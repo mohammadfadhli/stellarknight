@@ -14,7 +14,9 @@ function LoginCard() {
         try {
             await logIn(email, password);
             navigate("/");
-        } catch (error) {}
+        } catch (error) {
+            console.log(error.code)
+        }
     }
 
     return (
