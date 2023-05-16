@@ -11,10 +11,9 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [isLoading, setIsLoading] = useState(true);
-    const [functionIsRunning, setFunctionIsRunning] = useState(true);
 
     function logOut() {
-        auth.signOut()
+        return auth.signOut()
             .then(() => {
                 console.log("Signed Out");
             })
@@ -26,7 +25,7 @@ export function AuthProvider({ children }) {
     }
 
     function logIn(email, password) {
-        signInWithEmailAndPassword(auth, email, password)
+        return signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
@@ -41,7 +40,7 @@ export function AuthProvider({ children }) {
     }
 
     function createUser(email, password) {
-        createUserWithEmailAndPassword(auth, email, password)
+        return createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
@@ -63,7 +62,7 @@ export function AuthProvider({ children }) {
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 const uid = user.uid;
                 console.log(uid + " is signed in");
-                setCurrentUser("Logged In");
+                setCurrentUser(uid);
                 setIsLoading(false);
                 // ...
             } else {
@@ -76,7 +75,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ currentUser, isLoading, logOut, logIn, createUser, functionIsRunning }}>
+        <AuthContext.Provider value={{ currentUser, isLoading, logOut, logIn, createUser }}>
             {children}
         </AuthContext.Provider>
     );

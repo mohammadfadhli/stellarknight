@@ -1,5 +1,5 @@
 import "../styles/Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
 
@@ -7,10 +7,14 @@ function LoginCard() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { logIn } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    function signIn(e) {
+    async function signIn(e) {
         e.preventDefault();
-        logIn(email, password);
+        try {
+            await logIn(email, password);
+            navigate("/");
+        } catch (error) {}
     }
 
     return (
