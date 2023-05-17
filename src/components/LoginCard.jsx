@@ -37,13 +37,9 @@ function IsLoggedOut() {
                             type="email"
                             className="form-control"
                             id="exampleInputEmail1"
-                            aria-describedby="emailHelp"
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        <div id="emailHelp" className="form-text">
-                            We'll never share your email with anyone else.
-                        </div>
                     </div>
                     <div className="mb-3">
                         <label

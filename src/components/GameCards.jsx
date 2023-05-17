@@ -1,25 +1,28 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { db } from "../firebase.jsx";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, collection, getDocs, deleteDoc } from "firebase/firestore";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../auth.jsx";
 
 function GameCards() {
-
-    const [games, setGames] = useState([])
+    const [games, setGames] = useState([]);
+    const [gamesId, setGamesId] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-
-                const allgames = []
+                const allgames = [];
+                const allgamesid = [];
 
                 const querySnapshot = await getDocs(collection(db, "games"));
                 querySnapshot.forEach((doc) => {
                     games.push(doc.data());
-                    allgames.push(doc.data())
+                    allgames.push(doc.data());
+                    allgamesid.push(doc.id);
                 });
 
-                setGames(allgames)
-
+                setGames(allgames);
+                setGamesId(allgamesid);
             } catch (err) {
                 console.error(err);
             }
@@ -27,6 +30,42 @@ function GameCards() {
 
         fetchData();
     }, []);
+
+    async function deleteGame(clickedId) {
+        console.log(clickedId);
+        await deleteDoc(doc(db, "games", clickedId));
+        window.location.reload();
+    }
+
+    function IsLoggedIn(i) {
+        const { currentUser } = useContext(AuthContext);
+
+        if (currentUser) {
+            return (
+                <>
+                    <div class="d-flex flex-row">
+                        <div class="">
+                            <Link to={"/editreview/" + i.index}>
+                                <button type="button" class="btn btn-primary">
+                                    Edit
+                                </button>
+                            </Link>
+                        </div>
+                        <div class="ps-3">
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                id={i.index}
+                                onClick={(e) => deleteGame(e.target.id)}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+    }
 
     const gameCards = games.map((games, index) => (
         <Fragment key={index}>
@@ -36,6 +75,7 @@ function GameCards() {
                         <h5 className="card-title">{games.title}</h5>
                         <p className="card-text">Rating: {games.rating}</p>
                         <p className="card-text">Review: {games.review}</p>
+                        <IsLoggedIn index={gamesId[index]}></IsLoggedIn>
                     </div>
                 </div>
             </div>
@@ -44,8 +84,7 @@ function GameCards() {
 
     return (
         <>
-            <div className="container my-5">
-                <h1 className="text-center">Game Reviews</h1>
+            <div className="container mt-3 mb-5">
                 <div className="row">{gameCards}</div>
             </div>
         </>

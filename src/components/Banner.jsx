@@ -12,11 +12,7 @@ function Banner() {
                         </h1>
                         <h3>an aspiring coder.</h3>
                         <br></br>
-                        <p>
-                            Morbi vehicula finibus eros, sed accumsan odio.
-                            Aenean sed luctus leo. Morbi id est eget ante
-                            feugiat placerat et at eros.
-                        </p>
+                        <p>With great power comes great responsibility.</p>
                         <SocialsBar></SocialsBar>
                     </div>
                 </div>
