@@ -6,13 +6,13 @@ import NavBar from "./components/NavBar.jsx";
 import SignUpCard from "./components/SignUpCard.jsx";
 import NewGameEntry from "./components/NewGameEntry.jsx";
 // import LogOut from "./pages/Logout.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
 import EditGameReview from "./pages/EditGameReview.jsx";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
-        path: "/",
+        path: "/*",
         element: <NavBar />,
         children: [
             {
