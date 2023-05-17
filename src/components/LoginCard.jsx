@@ -2,11 +2,13 @@ import "../styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
+import Error from "./Error";
 
-function LoginCard() {
+function IsLoggedOut() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { logIn } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
     async function signIn(e) {
@@ -15,7 +17,7 @@ function LoginCard() {
             await logIn(email, password);
             navigate("/");
         } catch (error) {
-            console.log(error.code)
+            console.log(error.code);
         }
     }
 
@@ -71,6 +73,16 @@ function LoginCard() {
             </div>
         </>
     );
+}
+
+function LoginCard() {
+    const { currentUser } = useContext(AuthContext);
+
+    if (currentUser) {
+        return <Error></Error>;
+    } else {
+        return <IsLoggedOut></IsLoggedOut>;
+    }
 }
 
 export default LoginCard;

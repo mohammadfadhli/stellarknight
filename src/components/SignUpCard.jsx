@@ -2,23 +2,24 @@ import "../styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
+import Error from "./Error";
 
-function SignUpCard() {
+function IsLoggedOut() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUserName] = useState("");
     const navigate = useNavigate();
 
-    const {createUser, updateUserName} = useContext(AuthContext)
+    const { createUser, updateUserName } = useContext(AuthContext);
 
     async function signUp(e) {
         e.preventDefault();
         try {
             await createUser(email, password);
-            await updateUserName({displayName: username})
+            await updateUserName({ displayName: username });
             navigate("/");
         } catch (error) {
-            console.log(error.code)
+            console.log(error.code);
         }
     }
 
@@ -28,7 +29,10 @@ function SignUpCard() {
                 <h1 className="pt-4 text-center">Sign Up</h1>
                 <form className="p-4" onSubmit={signUp}>
                     <div className="mb-3">
-                        <label htmlFor="exampleInputEmail1" className="form-label">
+                        <label
+                            htmlFor="exampleInputEmail1"
+                            className="form-label"
+                        >
                             Email address
                         </label>
                         <input
@@ -44,7 +48,10 @@ function SignUpCard() {
                         </div>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="exampleInputUserName1" className="form-label">
+                        <label
+                            htmlFor="exampleInputUserName1"
+                            className="form-label"
+                        >
                             Username
                         </label>
                         <input
@@ -56,7 +63,10 @@ function SignUpCard() {
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="exampleInputPassword1" className="form-label">
+                        <label
+                            htmlFor="exampleInputPassword1"
+                            className="form-label"
+                        >
                             Password
                         </label>
                         <input
@@ -80,6 +90,16 @@ function SignUpCard() {
             </div>
         </>
     );
+}
+
+function SignUpCard() {
+    const { currentUser } = useContext(AuthContext);
+
+    if (currentUser) {
+        return <Error></Error>;
+    } else {
+        return <IsLoggedOut></IsLoggedOut>;
+    }
 }
 
 export default SignUpCard;

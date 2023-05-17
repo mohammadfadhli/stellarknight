@@ -17,31 +17,69 @@ function UserState() {
 }
 
 function NavBarIsLoggedIn() {
-
-    const {logOut} = useContext(AuthContext)
+    const { logOut, currentUser } = useContext(AuthContext);
 
     return (
         <>
-            <div id="navbar">
-                <ul className="nav justify-content-center">
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"/"} className="nav-link">
-                            Home
-                        </Link>
-                    </li>
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"games"} className="nav-link">
-                            Game Reviews
-                        </Link>
-                    </li>
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"/"} className="nav-link" onClick={logOut}>
-                            Log Out
-                        </Link>
-                        
-                    </li>
-                </ul>
-            </div>
+            <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div
+                        class="collapse navbar-collapse justify-content-center"
+                        id="navbarNav"
+                    >
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"/"}
+                                    className="nav-link"
+                                >
+                                    Home
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"games"}
+                                    className="nav-link"
+                                >
+                                    Game Reviews
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={""}
+                                    className="nav-link"
+                                >
+                                    Welcome back, {currentUser.displayName}
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"/"}
+                                    className="nav-link"
+                                    onClick={logOut}
+                                >
+                                    Log Out
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
             <Outlet></Outlet>
         </>
     );
@@ -50,25 +88,55 @@ function NavBarIsLoggedIn() {
 function NavBarIsLoggedOut() {
     return (
         <>
-            <div id="navbar">
-                <ul className="nav justify-content-center">
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"/"} className="nav-link">
-                            Home
-                        </Link>
-                    </li>
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"games"} className="nav-link">
-                            Game Reviews
-                        </Link>
-                    </li>
-                    <li className="nav-item my-1">
-                        <Link reloadDocument to={"/login"} className="nav-link">
-                            Log In
-                        </Link>
-                    </li>
-                </ul>
-            </div>
+            <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div
+                        class="collapse navbar-collapse justify-content-center"
+                        id="navbarNav"
+                    >
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"/"}
+                                    className="nav-link"
+                                >
+                                    Home
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"games"}
+                                    className="nav-link"
+                                >
+                                    Game Reviews
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link
+                                    reloadDocument
+                                    to={"/login"}
+                                    className="nav-link"
+                                >
+                                    Log In
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
             <Outlet></Outlet>
         </>
     );
