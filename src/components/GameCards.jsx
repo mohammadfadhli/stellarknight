@@ -2,18 +2,9 @@ import { Fragment, useEffect, useState } from "react";
 import { db } from "../firebase.jsx";
 import { collection, getDocs } from "firebase/firestore";
 
-// const querySnapshot = await getDocs(collection(db, "games"));
-// querySnapshot.forEach((doc) => {
-//     // doc.data() is never undefined for query doc snapshots
-//     //   console.log(doc.id, " => ", doc.data());
-//     games.push(doc.data());
-// });
-
 function GameCards() {
 
     const [games, setGames] = useState([])
-
-    // const games = [];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,8 +14,6 @@ function GameCards() {
 
                 const querySnapshot = await getDocs(collection(db, "games"));
                 querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
-                    //   console.log(doc.id, " => ", doc.data());
                     games.push(doc.data());
                     allgames.push(doc.data())
                 });
@@ -56,7 +45,7 @@ function GameCards() {
     return (
         <>
             <div className="container my-5">
-                <h1 className="text-center">Games I've Played</h1>
+                <h1 className="text-center">Game Reviews</h1>
                 <div className="row">{gameCards}</div>
             </div>
         </>

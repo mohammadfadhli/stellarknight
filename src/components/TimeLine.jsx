@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import "../styles/TimeLine.css"
 
 const educations = [
     {
@@ -20,6 +21,7 @@ const educations = [
 ];
 
 const educationList = educations.map((education, index) => (
+
     <Fragment key={index}>
         <div>
         <div className="card mt-3">
@@ -31,6 +33,7 @@ const educationList = educations.map((education, index) => (
         </div>
         </div>
     </Fragment>
+
 ));
 
 function TimeLine() {
