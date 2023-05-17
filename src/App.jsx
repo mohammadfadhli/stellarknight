@@ -6,11 +6,11 @@ import NavBar from "./components/NavBar.jsx";
 import SignUpCard from "./components/SignUpCard.jsx";
 import NewGameEntry from "./components/NewGameEntry.jsx";
 // import LogOut from "./pages/Logout.jsx";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
 import EditGameReview from "./pages/EditGameReview.jsx";
 
-const router = createHashRouter([
+const router = createBrowserRouter([
     {
         path: "/*",
         element: <NavBar />,
