@@ -4,18 +4,18 @@ import LoginCard from "./components/LoginCard.jsx";
 import NavBar from "./components/NavBar.jsx";
 import SignUpCard from "./components/SignUpCard.jsx";
 import NewGameEntry from "./components/NewGameEntry.jsx";
-import {
-    createBrowserRouter,
-    RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
 import EditGameReview from "./pages/EditGameReview.jsx";
-import ProtectedRoutes from "./routes/protectedroutes.jsx"
-import AnonymousRoute from "./routes/anonymousroute.jsx"
+import ProtectedRoutes from "./routes/protectedroutes.jsx";
+import AnonymousRoute from "./routes/anonymousroute.jsx";
+import Error from "./components/Error.jsx";
 
 const router = createBrowserRouter([
     {
+        path: "/",
         element: <NavBar></NavBar>, // ensures that every page renders the navbar component
+        errorElement: <Error></Error>,
         children: [
             {
                 element: <ProtectedRoutes></ProtectedRoutes>, // pages that require authentication goes here
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
             },
             // pages that require neither goes here
             {
-                path: "/",
+                // path: "/",
                 index: true,
                 element: <Home></Home>,
             },
