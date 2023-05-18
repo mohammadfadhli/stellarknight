@@ -1,5 +1,4 @@
 import Home from "./pages/Home.jsx";
-import GameCards from "./components/GameCards.jsx";
 import GameReview from "./pages/GameReview.jsx";
 import LoginCard from "./components/LoginCard.jsx";
 import NavBar from "./components/NavBar.jsx";
@@ -11,8 +10,8 @@ import {
 } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
 import EditGameReview from "./pages/EditGameReview.jsx";
-import ProtectedRoutes from "../protectedroutes.jsx";
-import AnonymousRoute from "../anonymousroute.jsx";
+import ProtectedRoutes from "./routes/protectedroutes.jsx"
+import AnonymousRoute from "./routes/anonymousroute.jsx"
 
 const router = createBrowserRouter([
     {

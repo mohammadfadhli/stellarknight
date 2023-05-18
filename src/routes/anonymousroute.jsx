@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "./src/auth";
+import { AuthContext } from "../auth";
 import { Navigate, Outlet } from "react-router-dom";
 
 function AnonymousRoute() {
