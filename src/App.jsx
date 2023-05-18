@@ -12,7 +12,7 @@ import EditGameReview from "./pages/EditGameReview.jsx";
 
 const router = createBrowserRouter([
     {
-        path: "/*",
+        path: "/",
         element: <NavBar />,
         children: [
             {

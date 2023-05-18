@@ -1,5 +1,5 @@
 import "../styles/Login.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, redirect } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
 import Error from "./Error";
@@ -11,13 +11,14 @@ function IsLoggedOut() {
     const navigate = useNavigate();
 
     const { createUser, updateUserName } = useContext(AuthContext);
-
+    
     async function signUp(e) {
         e.preventDefault();
         try {
-            await createUser(email, password);
-            await updateUserName({ displayName: username });
-            navigate("/");
+            await createUser(email, password)
+            navigate("/", {state: {dn: username}})
+            await updateUserName({displayName: username})
+            
         } catch (error) {
             console.log(error.code);
         }

@@ -1,23 +1,9 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import "../styles/NavBar.css";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 
-function UserState() {
-    const { currentUser, isLoading } = useContext(AuthContext);
-
-    if (!isLoading) {
-        if (currentUser) {
-            return <NavBarIsLoggedIn></NavBarIsLoggedIn>;
-        } else {
-            return <NavBarIsLoggedOut></NavBarIsLoggedOut>;
-        }
-    } else {
-    }
-}
-
-function NavBarIsLoggedIn() {
-    const { logOut, currentUser } = useContext(AuthContext);
+function NavBarIsLoggedIn(props) {
 
     return (
         <>
@@ -63,7 +49,7 @@ function NavBarIsLoggedIn() {
                                     to={""}
                                     className="nav-link"
                                 >
-                                    Welcome back, {currentUser.displayName}
+                                    Welcome back, {props.displayname}
                                 </Link>
                             </li>
                             <li className="nav-item">
@@ -71,7 +57,7 @@ function NavBarIsLoggedIn() {
                                     reloadDocument
                                     to={"/"}
                                     className="nav-link"
-                                    onClick={logOut}
+                                    onClick={props.handleLogOut}
                                 >
                                     Log Out
                                 </Link>
@@ -143,11 +129,30 @@ function NavBarIsLoggedOut() {
 }
 
 function NavBar() {
-    return (
-        <>
-            <UserState></UserState>
-        </>
-    );
+    const { currentUser, isLoading, logOut } = useContext(AuthContext);
+    const [showName, setShowName] = useState("")
+
+    const location = useLocation();
+    useEffect(() => {
+        if(location.state) // if from signup, retrieve passed username state
+        {
+            setShowName(location.state.dn)
+        }
+        else if(currentUser) // if not from signup, retrieve from auth
+        {
+            setShowName(currentUser.displayName)
+        }
+    })
+
+    if (!isLoading) {
+        if (currentUser) {
+            console.log(currentUser.displayName)
+            return <NavBarIsLoggedIn displayname={showName} handleLogOut={logOut}></NavBarIsLoggedIn>;
+        } else {
+            return <NavBarIsLoggedOut></NavBarIsLoggedOut>;
+        }
+    } else {
+    }
 }
 
 export default NavBar;
