@@ -5,10 +5,8 @@ import LoginCard from "./components/LoginCard.jsx";
 import NavBar from "./components/NavBar.jsx";
 import SignUpCard from "./components/SignUpCard.jsx";
 import NewGameEntry from "./components/NewGameEntry.jsx";
-// import LogOut from "./pages/Logout.jsx";
 import {
     createBrowserRouter,
-    createHashRouter,
     RouterProvider,
 } from "react-router-dom";
 import { AuthProvider } from "./auth.jsx";
