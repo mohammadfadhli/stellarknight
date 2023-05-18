@@ -2,6 +2,8 @@ import "../styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
+import { db } from "../firebase.jsx";
+import { collection, addDoc } from "firebase/firestore";
 
 function IsLoggedOut() {
     const [email, setEmail] = useState("");
@@ -9,15 +11,20 @@ function IsLoggedOut() {
     const [username, setUserName] = useState("");
     const navigate = useNavigate();
 
-    const { createUser, updateUserName } = useContext(AuthContext);
-    
+    const { createUser, updateUserName, currentUser } = useContext(AuthContext);
+
     async function signUp(e) {
         e.preventDefault();
         try {
-            await createUser(email, password)
-            navigate("/", {state: {dn: username}})
-            await updateUserName({displayName: username})
-            
+            await createUser(email, password).then(async (userCredential) => {
+                const user = userCredential.user;
+                await addDoc(collection(db, "users"), {
+                    uid: user.uid,
+                    role: "default",
+                });
+            });
+            navigate("/", { state: { dn: username } });
+            await updateUserName({ displayName: username });
         } catch (error) {
             console.log(error.code);
         }
@@ -93,8 +100,7 @@ function IsLoggedOut() {
 }
 
 function SignUpCard() {
-
-    return <IsLoggedOut></IsLoggedOut>
+    return <IsLoggedOut></IsLoggedOut>;
 }
 
 export default SignUpCard;
