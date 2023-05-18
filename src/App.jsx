@@ -15,7 +15,6 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <NavBar></NavBar>, // ensures that every page renders the navbar component
-        errorElement: <Error></Error>,
         children: [
             {
                 element: <ProtectedRoutes></ProtectedRoutes>, // pages that require authentication goes here
@@ -45,7 +44,6 @@ const router = createBrowserRouter([
             },
             // pages that require neither goes here
             {
-                // path: "/",
                 index: true,
                 element: <Home></Home>,
             },
@@ -53,6 +51,10 @@ const router = createBrowserRouter([
                 path: "games",
                 element: <GameReview></GameReview>,
             },
+            {
+                path: "*",
+                element: <Error></Error> // show 404 error page if path doesn't exist
+            }
         ],
     },
 ]);

@@ -1,7 +1,4 @@
-import { useRouteError } from "react-router-dom";
-
 function ErrorMsg() {
-    const error = useRouteError();
 
     return (
         <>
@@ -11,7 +8,7 @@ function ErrorMsg() {
                         <h1>Oops!</h1>
                         <h3>Sorry, an unexpected error has occured.</h3>
                         <p>
-                            {error.statusText || error.message}
+                            Page not found
                         </p>
                     </div>
                 </div>
