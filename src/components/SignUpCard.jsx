@@ -1,8 +1,7 @@
 import "../styles/Login.css";
-import { Link, useNavigate, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
-import Error from "./Error";
 
 function IsLoggedOut() {
     const [email, setEmail] = useState("");
@@ -94,13 +93,8 @@ function IsLoggedOut() {
 }
 
 function SignUpCard() {
-    const { currentUser } = useContext(AuthContext);
 
-    if (currentUser) {
-        return <Error></Error>;
-    } else {
-        return <IsLoggedOut></IsLoggedOut>;
-    }
+    return <IsLoggedOut></IsLoggedOut>
 }
 
 export default SignUpCard;
