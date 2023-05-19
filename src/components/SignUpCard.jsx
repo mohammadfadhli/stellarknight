@@ -23,8 +23,8 @@ function IsLoggedOut() {
                     role: "default",
                 });
             });
-            navigate("/", { state: { dn: username } });
             await updateUserName({ displayName: username });
+            navigate("/");
         } catch (error) {
             console.log(error.code);
         }

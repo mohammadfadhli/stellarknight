@@ -129,24 +129,20 @@ function NavBarIsLoggedOut() {
 }
 
 function NavBar() {
-    const { currentUser, isLoading, logOut } = useContext(AuthContext);
-    const [showName, setShowName] = useState("")
+    const { currentUser, isLoading, logOut, displayName } = useContext(AuthContext);
+    const [showName, setShowName] = useState(null)
 
-    const location = useLocation();
     useEffect(() => {
-        if(location.state) // if from signup, retrieve passed username state
+
+        if(currentUser)
         {
-            setShowName(location.state.dn)
+            setShowName(displayName)
         }
-        else if(currentUser) // if not from signup, retrieve from auth
-        {
-            setShowName(currentUser.displayName)
-        }
+
     })
 
     if (!isLoading) {
-        if (currentUser) {
-            console.log(currentUser.displayName)
+        if (showName) {
             return <NavBarIsLoggedIn displayname={showName} handleLogOut={logOut}></NavBarIsLoggedIn>;
         } else {
             return <NavBarIsLoggedOut></NavBarIsLoggedOut>;

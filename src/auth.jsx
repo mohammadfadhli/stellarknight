@@ -12,6 +12,7 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [displayName, setDisplayName] = useState("");
 
     function logOut() {
         return auth.signOut();
@@ -26,6 +27,7 @@ export function AuthProvider({ children }) {
     }
 
     function updateUserName(params) {
+        setDisplayName(params.displayName)
         return updateProfile(auth.currentUser, params);
     }
 
@@ -37,6 +39,7 @@ export function AuthProvider({ children }) {
                 const uid = user.uid;
                 console.log(uid + " is signed in");
                 setCurrentUser(user);
+                setDisplayName(user.displayName)
                 setIsLoading(false);
                 // ...
             } else {
@@ -57,6 +60,7 @@ export function AuthProvider({ children }) {
                 logIn,
                 createUser,
                 updateUserName,
+                displayName
             }}
         >
             {children}
