@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
 import Error from "./Error";
 import db from "../firebase.jsx";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
@@ -10,19 +10,29 @@ function IsLoggedIn() {
     const [gameTitle, setGameTitle] = useState("");
     const [gameRating, setGameRating] = useState("");
     const [gameReview, setGameReview] = useState("");
-    const navigate = useNavigate()
+    const { currentUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     async function addGame(e) {
         e.preventDefault();
 
         // Add a new document with a generated id.
-        const docRef = await addDoc(collection(db, "games"), {
+        // const docRef = await addDoc(collection(db, "games"), {
+        //     title: gameTitle,
+        //     rating: gameRating,
+        //     review: gameReview,
+        // });
+
+        const docRef = doc(db, "allgames", currentUser.uid);
+        const colRef = collection(docRef, "games");
+        await addDoc(colRef, {
             title: gameTitle,
             rating: gameRating,
-            review: gameReview
+            review: gameReview,
         });
+
         console.log("Document written with ID: ", docRef.id);
-        navigate("/games")
+        navigate(`/games/${currentUser.uid}`);
     }
 
     return (
@@ -57,13 +67,15 @@ function IsLoggedIn() {
                             onChange={(e) => setGameRating(e.target.value)}
                             required
                         />
-                        <div id="emailHelp" class="form-text">Give a rating from a scale of 1 to 10.</div>
+                        <div id="emailHelp" class="form-text">
+                            Give a rating from a scale of 1 to 10.
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="gameReview" class="form-label">
                             Review
                         </label>
-                        <textarea 
+                        <textarea
                             type="text"
                             class="form-control"
                             id="gameReview"

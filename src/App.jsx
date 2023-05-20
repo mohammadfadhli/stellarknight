@@ -10,6 +10,7 @@ import EditGameReview from "./pages/EditGameReview.jsx";
 import ProtectedRoutes from "./routes/protectedroutes.jsx";
 import AnonymousRoute from "./routes/anonymousroute.jsx";
 import Error from "./components/Error.jsx";
+import IndivGameReview from "./pages/IndivGameReview.jsx"
 
 const router = createBrowserRouter([
     {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
             {
                 path: "*",
                 element: <Error></Error> // show 404 error page if path doesn't exist
+            },
+            {
+                path: "games/:id",
+                element: <IndivGameReview></IndivGameReview>
             }
         ],
     },

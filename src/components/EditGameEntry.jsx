@@ -12,7 +12,9 @@ function IsLoggedIn() {
     const [gameReview, setGameReview] = useState("");
     const navigate = useNavigate();
     let { id } = useParams();
-    const docRef = doc(db, "games", id);
+    const {currentUser} = useContext(AuthContext)
+    // const docRef = doc(db, "games", id);
+    const docRef = doc(db, `allgames/${currentUser.uid}/games`, id)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +47,7 @@ function IsLoggedIn() {
         });
 
         console.log("Document written with ID: ", docRef.id);
-        navigate("/games");
+        navigate(`/games/${currentUser.uid}`);
     }
 
     return (

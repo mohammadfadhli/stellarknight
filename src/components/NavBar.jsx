@@ -55,6 +55,15 @@ function NavBarIsLoggedIn(props) {
                             <li className="nav-item">
                                 <Link
                                     reloadDocument
+                                    to={`games/${props.uid}`}
+                                    className="nav-link"
+                                >
+                                    My Reviews
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link
+                                    reloadDocument
                                     to={"/"}
                                     className="nav-link"
                                     onClick={props.handleLogOut}
@@ -113,7 +122,7 @@ function NavBarIsLoggedOut() {
                             <li class="nav-item">
                                 <Link
                                     reloadDocument
-                                    to={"/login"}
+                                    to={"login"}
                                     className="nav-link"
                                 >
                                     Log In
@@ -143,7 +152,7 @@ function NavBar() {
 
     if (!isLoading) {
         if (showName) {
-            return <NavBarIsLoggedIn displayname={showName} handleLogOut={logOut}></NavBarIsLoggedIn>;
+            return <NavBarIsLoggedIn displayname={showName} handleLogOut={logOut} uid={currentUser.uid}></NavBarIsLoggedIn>;
         } else {
             return <NavBarIsLoggedOut></NavBarIsLoggedOut>;
         }

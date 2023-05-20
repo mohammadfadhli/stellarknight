@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth";
 import { db } from "../firebase.jsx";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, setDoc, doc } from "firebase/firestore";
 
 function IsLoggedOut() {
     const [email, setEmail] = useState("");
@@ -11,16 +11,21 @@ function IsLoggedOut() {
     const [username, setUserName] = useState("");
     const navigate = useNavigate();
 
-    const { createUser, updateUserName, currentUser } = useContext(AuthContext);
+    const { createUser, updateUserName } = useContext(AuthContext);
 
     async function signUp(e) {
         e.preventDefault();
         try {
             await createUser(email, password).then(async (userCredential) => {
                 const user = userCredential.user;
-                await addDoc(collection(db, "users"), {
-                    uid: user.uid,
-                    role: "default",
+                await setDoc(doc(db, "allgames", user.uid), { uid: user.uid }).then(() => {
+                    const docRef = doc(db, "allgames", user.uid)
+                    const colRef = collection(docRef, "games")
+                    setDoc(doc(colRef, "default"), {
+                        title: "title",
+                        rating: "rating",
+                        review: "review"
+                    })
                 });
             });
             await updateUserName({ displayName: username });

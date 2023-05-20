@@ -1,12 +1,14 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { db } from "../firebase.jsx";
 import { doc, collection, getDocs, deleteDoc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../auth.jsx";
 
 function GameCards() {
     const [games, setGames] = useState([]);
     const [gamesId, setGamesId] = useState([]);
+    const { currentUser } = useContext(AuthContext);
+    let { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -14,12 +16,24 @@ function GameCards() {
                 const allgames = [];
                 const allgamesid = [];
 
-                const querySnapshot = await getDocs(collection(db, "games"));
-                querySnapshot.forEach((doc) => {
-                    games.push(doc.data());
-                    allgames.push(doc.data());
-                    allgamesid.push(doc.id);
+                // get allgames from userid
+                const docsSnap = await getDocs(
+                    collection(db, `allgames/${id}/games`)
+                );
+                docsSnap.forEach((doc) => {
+                    if (doc.id != "default") {
+                        games.push(doc.data());
+                        allgames.push(doc.data());
+                        allgamesid.push(doc.id);
+                    }
                 });
+
+                // const querySnapshot = await getDocs(collection(db, "games"));
+                // querySnapshot.forEach((doc) => {
+                //     games.push(doc.data());
+                //     allgames.push(doc.data());
+                //     allgamesid.push(doc.id);
+                // });
 
                 setGames(allgames);
                 setGamesId(allgamesid);
@@ -33,7 +47,9 @@ function GameCards() {
 
     async function deleteGame(clickedId) {
         console.log(clickedId);
-        await deleteDoc(doc(db, "games", clickedId));
+        // await deleteDoc(doc(db, "games", clickedId));
+        await deleteDoc(doc(db, `allgames/${currentUser.uid}/games`, clickedId))
+
         window.location.reload();
     }
 
