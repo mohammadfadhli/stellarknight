@@ -18,7 +18,7 @@ function IsLoggedOut() {
         try {
             await createUser(email, password).then(async (userCredential) => {
                 const user = userCredential.user;
-                await setDoc(doc(db, "allgames", user.uid), { uid: user.uid }).then(() => {
+                await setDoc(doc(db, "allgames", user.uid), { displayName: username, uid: user.uid }).then(() => {
                     const docRef = doc(db, "allgames", user.uid)
                     const colRef = collection(docRef, "games")
                     setDoc(doc(colRef, "default"), {

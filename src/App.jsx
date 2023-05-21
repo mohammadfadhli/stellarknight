@@ -1,5 +1,4 @@
 import Home from "./pages/Home.jsx";
-import GameReview from "./pages/GameReview.jsx";
 import LoginCard from "./components/LoginCard.jsx";
 import NavBar from "./components/NavBar.jsx";
 import SignUpCard from "./components/SignUpCard.jsx";
@@ -10,7 +9,9 @@ import EditGameReview from "./pages/EditGameReview.jsx";
 import ProtectedRoutes from "./routes/protectedroutes.jsx";
 import AnonymousRoute from "./routes/anonymousroute.jsx";
 import Error from "./components/Error.jsx";
-import IndivGameReview from "./pages/IndivGameReview.jsx"
+import GameReview from "./pages/GameReview.jsx"
+import Feed from "./pages/Feed.jsx"
+import Profile from "./pages/Profile.jsx";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
                     {
                         path: "editreview/:id",
                         element: <EditGameReview></EditGameReview>,
+                    },
+                    {
+                        path: "profile",
+                        element: <Profile></Profile>
                     },
                 ],
             },
@@ -49,16 +54,17 @@ const router = createBrowserRouter([
                 element: <Home></Home>,
             },
             {
-                path: "games",
-                element: <GameReview></GameReview>,
-            },
-            {
                 path: "*",
                 element: <Error></Error> // show 404 error page if path doesn't exist
             },
             {
                 path: "games/:id",
-                element: <IndivGameReview></IndivGameReview>
+                element: <GameReview></GameReview>
+            }
+            ,
+            {
+                path: "feed",
+                element: <Feed></Feed>
             }
         ],
     },

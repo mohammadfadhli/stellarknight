@@ -5,6 +5,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     updateProfile,
+    updateEmail
 } from "firebase/auth";
 
 export const AuthContext = createContext();
@@ -29,6 +30,10 @@ export function AuthProvider({ children }) {
     function updateUserName(params) {
         setDisplayName(params.displayName)
         return updateProfile(auth.currentUser, params);
+    }
+
+    function updateUserEmail(email) {
+        return updateEmail(auth.currentUser, email);
     }
 
     useEffect(() => {
@@ -60,7 +65,8 @@ export function AuthProvider({ children }) {
                 logIn,
                 createUser,
                 updateUserName,
-                displayName
+                displayName,
+                updateUserEmail
             }}
         >
             {children}

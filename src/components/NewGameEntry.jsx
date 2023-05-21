@@ -6,7 +6,7 @@ import { collection, addDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
-function IsLoggedIn() {
+function NewGameEntry() {
     const [gameTitle, setGameTitle] = useState("");
     const [gameRating, setGameRating] = useState("");
     const [gameReview, setGameReview] = useState("");
@@ -15,13 +15,6 @@ function IsLoggedIn() {
 
     async function addGame(e) {
         e.preventDefault();
-
-        // Add a new document with a generated id.
-        // const docRef = await addDoc(collection(db, "games"), {
-        //     title: gameTitle,
-        //     rating: gameRating,
-        //     review: gameReview,
-        // });
 
         const docRef = doc(db, "allgames", currentUser.uid);
         const colRef = collection(docRef, "games");
@@ -90,16 +83,6 @@ function IsLoggedIn() {
             </div>
         </>
     );
-}
-
-function NewGameEntry() {
-    const { currentUser } = useContext(AuthContext);
-
-    if (currentUser) {
-        return <IsLoggedIn></IsLoggedIn>;
-    } else {
-        return <Error></Error>;
-    }
 }
 
 export default NewGameEntry;

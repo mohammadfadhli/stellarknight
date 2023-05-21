@@ -28,13 +28,6 @@ function GameCards() {
                     }
                 });
 
-                // const querySnapshot = await getDocs(collection(db, "games"));
-                // querySnapshot.forEach((doc) => {
-                //     games.push(doc.data());
-                //     allgames.push(doc.data());
-                //     allgamesid.push(doc.id);
-                // });
-
                 setGames(allgames);
                 setGamesId(allgamesid);
             } catch (err) {
@@ -47,7 +40,6 @@ function GameCards() {
 
     async function deleteGame(clickedId) {
         console.log(clickedId);
-        // await deleteDoc(doc(db, "games", clickedId));
         await deleteDoc(doc(db, `allgames/${currentUser.uid}/games`, clickedId))
 
         window.location.reload();
@@ -57,35 +49,40 @@ function GameCards() {
         const { currentUser } = useContext(AuthContext);
 
         if (currentUser) {
-            return (
-                <>
-                    <div class="d-flex flex-row">
-                        <div class="">
-                            <Link to={"/editreview/" + i.index}>
-                                <button type="button" class="btn btn-primary">
-                                    Edit
+            if(currentUser.uid === id)
+            {
+                return (
+                    <>
+                        <div class="d-flex flex-row">
+                            <div class="">
+                                <Link to={"/editreview/" + i.index}>
+                                    <button type="button" class="btn btn-primary">
+                                        Edit
+                                    </button>
+                                </Link>
+                            </div>
+                            <div class="ps-3">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    id={i.index}
+                                    onClick={(e) => deleteGame(e.target.id)}
+                                >
+                                    Delete
                                 </button>
-                            </Link>
+                            </div>
                         </div>
-                        <div class="ps-3">
-                            <button
-                                type="button"
-                                class="btn btn-danger"
-                                id={i.index}
-                                onClick={(e) => deleteGame(e.target.id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </>
-            );
+                    </>
+                );
+            }
+            
         }
     }
 
     const gameCards = games.map((games, index) => (
         <Fragment key={index}>
-            <div className="col-lg-4 col-md-6 col-sm-12 mt-3">
+            {/* <div className="col-lg-4 col-md-6 col-sm-12 mt-3"> */}
+            <div className="col-12 mt-3">
                 <div className="card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">{games.title}</h5>
