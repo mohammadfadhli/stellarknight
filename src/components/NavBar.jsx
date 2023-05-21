@@ -148,7 +148,7 @@ function NavBar() {
             setShowName(displayName)
         }
 
-    })
+    },)
 
     if (!isLoading) {
         if (showName) {

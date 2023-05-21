@@ -1,9 +1,10 @@
 import "../styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 import { db } from "../firebase.jsx";
 import { collection, setDoc, doc } from "firebase/firestore";
+import Alert from "./Alert";
 
 function IsLoggedOut() {
     const [email, setEmail] = useState("");
@@ -12,26 +13,61 @@ function IsLoggedOut() {
     const navigate = useNavigate();
 
     const { createUser, updateUserName } = useContext(AuthContext);
+    const [errorMsg, setErrorMsg] = useState("");
 
     async function signUp(e) {
         e.preventDefault();
         try {
             await createUser(email, password).then(async (userCredential) => {
                 const user = userCredential.user;
-                await setDoc(doc(db, "allgames", user.uid), { displayName: username, uid: user.uid }).then(() => {
-                    const docRef = doc(db, "allgames", user.uid)
-                    const colRef = collection(docRef, "games")
+                await setDoc(doc(db, "allgames", user.uid), {
+                    displayName: username,
+                    uid: user.uid,
+                }).then(() => {
+                    const docRef = doc(db, "allgames", user.uid);
+                    const colRef = collection(docRef, "games");
                     setDoc(doc(colRef, "default"), {
                         title: "title",
                         rating: "rating",
-                        review: "review"
-                    })
+                        review: "review",
+                    });
                 });
             });
             await updateUserName({ displayName: username });
             navigate("/");
         } catch (error) {
             console.log(error.code);
+            if(error.code == "auth/weak-password")
+            {
+                setErrorMsg("Your password is too weak. Please pick a stronger password.")
+            }
+            else if(error.code == "auth/email-already-in-use")
+            {
+                setErrorMsg("This Email is already in use.")
+            }
+            else
+            {
+                setErrorMsg(error.code)
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (errorMsg) {
+            const toRef = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(toRef);
+            }, 2000);
+        }
+    }, [errorMsg]);
+
+    function ShowAlert() {
+        if (errorMsg) {
+            return (
+                <>
+                    <Alert status="danger" text={errorMsg}></Alert>
+                </>
+            );
         }
     }
 
@@ -99,6 +135,9 @@ function IsLoggedOut() {
                         Sign Up
                     </button>
                 </form>
+            </div>
+            <div class="container">
+                <ShowAlert></ShowAlert>
             </div>
         </>
     );

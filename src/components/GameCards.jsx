@@ -9,6 +9,7 @@ function GameCards() {
     const [gamesId, setGamesId] = useState([]);
     const { currentUser } = useContext(AuthContext);
     let { id } = useParams();
+    let [isGamesDeleted, setIsGamesDeleted] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,7 +23,7 @@ function GameCards() {
                 );
                 docsSnap.forEach((doc) => {
                     if (doc.id != "default") {
-                        games.push(doc.data());
+                        // games.push(doc.data());
                         allgames.push(doc.data());
                         allgamesid.push(doc.id);
                     }
@@ -36,17 +37,27 @@ function GameCards() {
         };
 
         fetchData();
-    }, []);
+    }, [isGamesDeleted]);
 
     async function deleteGame(clickedId) {
         console.log(clickedId);
         await deleteDoc(doc(db, `allgames/${currentUser.uid}/games`, clickedId))
 
-        window.location.reload();
+        if(isGamesDeleted == false)
+        {
+            setIsGamesDeleted(true)
+        }
+        else if(isGamesDeleted == true)
+        {
+            setIsGamesDeleted(false)
+        }
+        
+
+        // window.location.reload();
     }
 
     function IsLoggedIn(i) {
-        const { currentUser } = useContext(AuthContext);
+        // const { currentUser } = useContext(AuthContext);
 
         if (currentUser) {
             if(currentUser.uid === id)

@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
+import Alert from "../components/Alert";
 
 function Profile() {
     const { currentUser, updateUserName, updateUserEmail } =
         useContext(AuthContext);
     const [username, setUserName] = useState("");
     const [email, setEmail] = useState("");
-    const [profileupdated, setProfileUpdated] = useState(false)
+    const [profileupdated, setProfileUpdated] = useState(false);
 
     useEffect(() => {
         setUserName(currentUser.displayName);
@@ -17,14 +18,14 @@ function Profile() {
         e.preventDefault();
         if (username) {
             await updateUserName({ displayName: username }).then(() => {
-                setProfileUpdated(true)
-            })
+                setProfileUpdated(true);
+            });
         }
 
         if (email) {
             await updateUserEmail(email).then(() => {
-                setProfileUpdated(true)
-            })
+                setProfileUpdated(true);
+            });
         }
 
         // setProfileUpdated(true)
@@ -34,25 +35,20 @@ function Profile() {
     useEffect(() => {
         if (profileupdated) {
             const toRef = setTimeout(() => {
-              setProfileUpdated(false);
-              clearTimeout(toRef);
-            }, 3000);
-          }
-    },[profileupdated])
+                setProfileUpdated(false);
+                clearTimeout(toRef);
+            }, 2000);
+        }
+    }, [profileupdated]);
 
     function SuccessAlert() {
-
-        if(profileupdated)
-        {
+        if (profileupdated) {
             return (
                 <>
-                    <div class="alert alert-success" role="alert">
-                        Changes Saved!
-                    </div>
+                    <Alert status="success" text="Changes Saved!"></Alert>
                 </>
             );
         }
-        
     }
 
     return (
@@ -98,7 +94,6 @@ function Profile() {
             <div class="container mt-3">
                 <SuccessAlert></SuccessAlert>
             </div>
-            
         </>
     );
 }

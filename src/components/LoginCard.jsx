@@ -1,12 +1,14 @@
 import "../styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
+import Alert from "./Alert";
 
 function IsLoggedOut() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { logIn } = useContext(AuthContext);
+    const [errorMsg, setErrorMsg] = useState("");
 
     const navigate = useNavigate();
 
@@ -16,7 +18,38 @@ function IsLoggedOut() {
             await logIn(email, password);
             navigate("/");
         } catch (error) {
+            if(error.code == "auth/too-many-requests")
+            {
+                setErrorMsg("Too many failed login attempts. Please try again later.")
+            }
+            else if(error.code == "auth/wrong-password" || error.code == "auth/user-not-found")
+            {
+                setErrorMsg("Incorrect Email or Password")
+            }
+            else
+            {
+                setErrorMsg(error.code)
+            }
             console.log(error.code);
+        }
+    }
+
+    useEffect(() => {
+        if (errorMsg) {
+            const toRef = setTimeout(() => {
+                setErrorMsg("");
+                clearTimeout(toRef);
+            }, 2000);
+        }
+    }, [errorMsg]);
+
+    function ShowAlert() {
+        if (errorMsg) {
+            return (
+                <>
+                    <Alert status="danger" text={errorMsg}></Alert>
+                </>
+            );
         }
     }
 
@@ -66,13 +99,16 @@ function IsLoggedOut() {
                     </button>
                 </form>
             </div>
+            <div class="container mt-3">
+                <ShowAlert></ShowAlert>
+            </div>
+            
         </>
     );
 }
 
 function LoginCard() {
-
-    return <IsLoggedOut></IsLoggedOut>
+    return <IsLoggedOut></IsLoggedOut>;
 }
 
 export default LoginCard;
