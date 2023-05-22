@@ -90,6 +90,19 @@ function GameCards() {
         }
     }
 
+    function RecommendationBadge(props){
+        
+        if(props.recommendation === "recommended")
+        {
+            return <p class="card-text badge rounded-pill text-bg-success">Recommended</p>
+        }
+        else if(props.recommendation === "notRecommended")
+        {
+            return <p class="card-text badge rounded-pill text-bg-danger">Not Recommended</p>
+        }
+
+    }
+
     const gameCards = games.map((games, index) => (
         <Fragment key={index}>
             {/* <div className="col-lg-4 col-md-6 col-sm-12 mt-3"> */}
@@ -97,8 +110,9 @@ function GameCards() {
                 <div className="card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">{games.title}</h5>
-                        <p className="card-text">Rating: {games.rating}</p>
+                        <p className="card-text">Rating: {games.rating}/10</p>
                         <p className="card-text">Review: {games.review}</p>
+                        <RecommendationBadge recommendation={games.recommendation}></RecommendationBadge>
                         <IsLoggedIn index={gamesId[index]}></IsLoggedIn>
                     </div>
                 </div>

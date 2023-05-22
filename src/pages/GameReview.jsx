@@ -2,8 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import GameCards from "../components/GameCards";
 import { AuthContext } from "../auth";
 import { Link, useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import db from "../firebase";
+import ProfilePicture from "../components/ProfilePicture";
 
 function IsLoggedIn() {
     const { currentUser } = useContext(AuthContext);
@@ -29,11 +28,24 @@ function IsLoggedIn() {
 }
 
 function GameReview() {
+    const { id } = useParams();
+
     return (
         <>
             <div className="container">
-                <h1 className="text-center mt-5">Game Reviews</h1>
-                <IsLoggedIn></IsLoggedIn>
+                <div class="container mt-5">
+                    <div class="row row-cols-auto text-center">
+                        <div class="col-sm-12 col-lg-4">
+                            <ProfilePicture uid={id}></ProfilePicture>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <h1>Game Reviews</h1>
+                        </div>
+                        <div class="col-sm-12 col-lg-4">
+                            <IsLoggedIn className="ms-auto"></IsLoggedIn>
+                        </div>
+                    </div>
+                </div>
             </div>
             <GameCards></GameCards>
         </>

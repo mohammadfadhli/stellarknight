@@ -10,6 +10,7 @@ function NewGameEntry() {
     const [gameTitle, setGameTitle] = useState("");
     const [gameRating, setGameRating] = useState("");
     const [gameReview, setGameReview] = useState("");
+    const [reccommendationRadio, setReccomendationRadio] = useState("recommended");
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ function NewGameEntry() {
             title: gameTitle,
             rating: gameRating,
             review: gameReview,
+            recommendation: reccommendationRadio
         });
 
         console.log("Document written with ID: ", docRef.id);
@@ -64,6 +66,34 @@ function NewGameEntry() {
                             Give a rating from a scale of 1 to 10.
                         </div>
                     </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="reccommendationRadio"
+                            id="recommended"
+                            value="recommended"
+                            onChange={(e)=> setReccomendationRadio(e.target.value)}
+                            checked={reccommendationRadio === "recommended"}
+                        />
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Recommended
+                        </label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="reccommendationRadio"
+                            id="notRecommended"
+                            value="notRecommended"
+                            onChange={(e)=> setReccomendationRadio(e.target.value)}
+                            checked={reccommendationRadio === "notRecommended"}
+                        />
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Not Recommended
+                        </label>
+                    </div>
                     <div class="mb-3">
                         <label for="gameReview" class="form-label">
                             Review
@@ -73,6 +103,8 @@ function NewGameEntry() {
                             class="form-control"
                             id="gameReview"
                             onChange={(e) => setGameReview(e.target.value)}
+                            style={{height: 100}}
+                            maxlength="500"
                             required
                         />
                     </div>
