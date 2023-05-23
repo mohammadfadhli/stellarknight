@@ -1,12 +1,14 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useContext } from "react";
 import { db } from "../firebase.jsx";
 import { getDocs, collection } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import "../styles/CardStyle.css";
+import { AuthContext } from "../auth.jsx";
 
 function Feed() {
     const [allusers, setAllUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {currentUser} = useContext(AuthContext)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,7 +17,20 @@ function Feed() {
 
                 const querySnapshot = await getDocs(collection(db, "allgames"));
                 querySnapshot.forEach(async (doc) => {
-                    users.push(doc.data());
+                    // users.push(doc.data());
+                    
+                    if(currentUser != null)
+                    {
+                        if(currentUser.uid != doc.id)
+                        {
+                            users.push(doc.data())
+                        }
+
+                    }
+                    else
+                    {
+                        users.push(doc.data())
+                    }
                 });
 
                 setAllUsers(users);
