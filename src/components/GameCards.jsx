@@ -63,7 +63,6 @@ function GameCards() {
                                     <button
                                         type="button"
                                         class="btn btn-primary"
-                                        title="edit"
                                     >
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
@@ -74,10 +73,9 @@ function GameCards() {
                                     type="button"
                                     class="btn btn-danger"
                                     id={i.index}
-                                    onClick={(e) => deleteGame(e.target.id)}
-                                    title="delete"
+                                    onClick={(e) => deleteGame(e.currentTarget.id)}
                                 >
-                                    <i class="bi bi-trash3"></i>
+                                    <i class="bi bi-trash"></i>
                                 </button>
                             </div>
                         </div>
