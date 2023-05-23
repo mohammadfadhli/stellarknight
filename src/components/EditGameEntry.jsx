@@ -3,7 +3,7 @@ import { AuthContext } from "../auth";
 import Error from "./Error";
 import db from "../firebase.jsx";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/Login.css";
 
 function IsLoggedIn() {
@@ -27,7 +27,7 @@ function IsLoggedIn() {
                     setGameTitle(docSnap.data().title);
                     setGameRating(docSnap.data().rating);
                     setGameReview(docSnap.data().review);
-                    setReccomendationRadio(docSnap.data().recommendation)
+                    setReccomendationRadio(docSnap.data().recommendation);
                     setCheckDocIfExist(true);
                     setIsLoaded(true);
                 } else {
@@ -51,7 +51,7 @@ function IsLoggedIn() {
             title: gameTitle,
             rating: gameRating,
             review: gameReview,
-            recommendation: reccommendationRadio
+            recommendation: reccommendationRadio,
         });
 
         console.log("Document written with ID: ", docRef.id);
@@ -118,6 +118,25 @@ function IsLoggedIn() {
                                 Recommended
                             </label>
                         </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="reccommendationRadio"
+                                id="mixed"
+                                value="mixed"
+                                onChange={(e) =>
+                                    setReccomendationRadio(e.target.value)
+                                }
+                                checked={reccommendationRadio === "mixed"}
+                            />
+                            <label
+                                class="form-check-label"
+                                for="flexRadioDefault2"
+                            >
+                                Mixed
+                            </label>
+                        </div>
                         <div class="form-check mb-3">
                             <input
                                 class="form-check-input"
@@ -149,7 +168,7 @@ function IsLoggedIn() {
                                 id="gameReview"
                                 onChange={(e) => setGameReview(e.target.value)}
                                 value={gameReview}
-                                style={{height: 100}}
+                                style={{ height: 100 }}
                                 maxlength="500"
                                 required
                             />

@@ -10,7 +10,8 @@ function NewGameEntry() {
     const [gameTitle, setGameTitle] = useState("");
     const [gameRating, setGameRating] = useState("");
     const [gameReview, setGameReview] = useState("");
-    const [reccommendationRadio, setReccomendationRadio] = useState("recommended");
+    const [reccommendationRadio, setReccomendationRadio] =
+        useState("recommended");
     const { currentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ function NewGameEntry() {
             title: gameTitle,
             rating: gameRating,
             review: gameReview,
-            recommendation: reccommendationRadio
+            recommendation: reccommendationRadio,
         });
 
         console.log("Document written with ID: ", docRef.id);
@@ -73,11 +74,29 @@ function NewGameEntry() {
                             name="reccommendationRadio"
                             id="recommended"
                             value="recommended"
-                            onChange={(e)=> setReccomendationRadio(e.target.value)}
+                            onChange={(e) =>
+                                setReccomendationRadio(e.target.value)
+                            }
                             checked={reccommendationRadio === "recommended"}
                         />
                         <label class="form-check-label" for="flexRadioDefault1">
                             Recommended
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="reccommendationRadio"
+                            id="mixed"
+                            value="mixed"
+                            onChange={(e) =>
+                                setReccomendationRadio(e.target.value)
+                            }
+                            checked={reccommendationRadio === "mixed"}
+                        />
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Mixed
                         </label>
                     </div>
                     <div class="form-check mb-3">
@@ -87,7 +106,9 @@ function NewGameEntry() {
                             name="reccommendationRadio"
                             id="notRecommended"
                             value="notRecommended"
-                            onChange={(e)=> setReccomendationRadio(e.target.value)}
+                            onChange={(e) =>
+                                setReccomendationRadio(e.target.value)
+                            }
                             checked={reccommendationRadio === "notRecommended"}
                         />
                         <label class="form-check-label" for="flexRadioDefault2">
@@ -103,7 +124,7 @@ function NewGameEntry() {
                             class="form-control"
                             id="gameReview"
                             onChange={(e) => setGameReview(e.target.value)}
-                            style={{height: 100}}
+                            style={{ height: 100 }}
                             maxlength="500"
                             required
                         />

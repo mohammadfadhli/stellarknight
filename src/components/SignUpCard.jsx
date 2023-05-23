@@ -23,6 +23,7 @@ function IsLoggedOut() {
                 await setDoc(doc(db, "allgames", user.uid), {
                     displayName: username,
                     uid: user.uid,
+                    bio: "",
                     profilepicture: "https://firebasestorage.googleapis.com/v0/b/stellarknight2-eddf1.appspot.com/o/users%2Fdefaultdp.png?alt=media&token=979791e0-ff90-40b7-ab8c-38f2579a05cb"
                 }).then(() => {
                     const docRef = doc(db, "allgames", user.uid);

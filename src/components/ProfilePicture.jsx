@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import db from "../firebase.jsx";
 import { doc, getDoc } from "firebase/firestore";
-import { AuthContext } from "../auth";
 
 function ProfilePicture(props) {
-
-    const [userPic, setUserPic] = useState("")
+    const [userPic, setUserPic] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,7 +14,8 @@ function ProfilePicture(props) {
 
                 if (docSnap.exists()) {
                     console.log("Document data:", docSnap.data());
-                    setUserPic(docSnap.data().profilepicture)
+                    setUserPic(docSnap.data().profilepicture);
+                    setIsLoading(false);
                 } else {
                     // docSnap.data() will be undefined in this case
                     console.log("No such document!");
@@ -23,13 +23,36 @@ function ProfilePicture(props) {
             } catch {}
         };
 
-        fetchData()
+        fetchData();
     });
 
-    console.log(userPic)
+    console.log(userPic);
 
-    return <><img src={userPic} class="border" style={{width: 200, height: 200}}></img></>
-
+    if (isLoading == false) {
+        return (
+            <>
+                <img
+                    src={userPic}
+                    class="img-fluid border"
+                    style={{ width: 200, height: 200 }}
+                ></img>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <div class="text-center mt-5">
+                    <div
+                        class="spinner-border"
+                        role="status"
+                        style={{ width: 48, height: 48 }}
+                    >
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </>
+        );
+    }
 }
 
 export default ProfilePicture;

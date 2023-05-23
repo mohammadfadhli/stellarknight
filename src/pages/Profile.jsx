@@ -16,6 +16,7 @@ function Profile() {
     const [profilePicUrl, setProfilePicUrl] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const docRef = doc(db, `allgames`, currentUser.uid);
+    const [bio, setBio] = useState(null);
 
     useEffect(() => {
         setUserName(currentUser.displayName);
@@ -53,7 +54,11 @@ function Profile() {
 
                 if (docSnap.exists()) {
                     console.log(docSnap.data().profilepicture);
-                    if (docSnap.data().profilepicture != "https://firebasestorage.googleapis.com/v0/b/stellarknight2-eddf1.appspot.com/o/users%2Fdefaultdp.png?alt=media&token=979791e0-ff90-40b7-ab8c-38f2579a05cb") {
+                    setBio(docSnap.data().bio);
+                    if (
+                        docSnap.data().profilepicture !=
+                        "https://firebasestorage.googleapis.com/v0/b/stellarknight2-eddf1.appspot.com/o/users%2Fdefaultdp.png?alt=media&token=979791e0-ff90-40b7-ab8c-38f2579a05cb"
+                    ) {
                         fetchData();
                     } else {
                         fetchDefault();
@@ -81,11 +86,21 @@ function Profile() {
             await updateUserName({ displayName: username }).then(() => {
                 setProfileUpdated(true);
             });
+
+            await updateDoc(doc(db, "allgames", currentUser.uid), {
+                displayName: username,
+            });
         }
 
         if (email) {
             await updateUserEmail(email).then(() => {
                 setProfileUpdated(true);
+            });
+        }
+
+        if (bio !== null) {
+            await updateDoc(doc(db, "allgames", currentUser.uid), {
+                bio: bio,
             });
         }
 
@@ -96,9 +111,7 @@ function Profile() {
             )
                 .then(async (snapshot) => {
                     console.log("Uploaded a blob or file!");
-                    // await updateDoc(doc(db, "allgames", currentUser.uid), {
-                    //     profilepicture: currentUser.uid,
-                    // });
+
                     return getDownloadURL(snapshot.ref);
                 })
                 .then(async (downloadURL) => {
@@ -107,15 +120,7 @@ function Profile() {
                         profilepicture: downloadURL,
                     });
                 });
-            //     console.log("Uploaded a blob or file!");
-            //     await updateDoc(doc(db, "allgames", currentUser.uid), {
-            //         profilepicture: currentUser.uid,
-            //     });
-            // });
         }
-
-        // setProfileUpdated(true)
-        // window.location.reload()
     }
 
     useEffect(() => {
@@ -144,10 +149,24 @@ function Profile() {
                     <div class="text-center mt-3">
                         <img
                             src={profilePicUrl}
-                            class="img"
+                            class="img border"
                             alt="..."
                             style={{ width: 200, height: 200 }}
                         ></img>
+                    </div>
+                </>
+            );
+        } else if (isLoading == true) {
+            return (
+                <>
+                    <div class="text-center mt-5">
+                        <div
+                            class="spinner-border"
+                            role="status"
+                            style={{ width: 48, height: 48 }}
+                        >
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                 </>
             );
@@ -157,7 +176,7 @@ function Profile() {
     return (
         <>
             <div class="container mt-5">
-                <h1 class="text-center">Edit Profile</h1>
+                <h4 class="text-center">Edit Profile</h4>
                 <HasProfilePicture></HasProfilePicture>
                 <form onSubmit={updateProfile}>
                     <div class="my-3">
@@ -189,6 +208,20 @@ function Profile() {
                                 setUserName(e.target.value);
                             }}
                             required
+                        />
+                    </div>
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">
+                            Bio
+                        </label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="bio"
+                            value={bio}
+                            onChange={(e) => {
+                                setBio(e.target.value);
+                            }}
                         />
                     </div>
                     <div class="mb-3">

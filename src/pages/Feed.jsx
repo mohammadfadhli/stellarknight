@@ -6,6 +6,7 @@ import "../styles/CardStyle.css";
 
 function Feed() {
     const [allusers, setAllUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,6 +19,7 @@ function Feed() {
                 });
 
                 setAllUsers(users);
+                setIsLoading(false);
             } catch (err) {
                 console.error(err);
             }
@@ -28,8 +30,9 @@ function Feed() {
 
     console.log(allusers);
 
-    const userCards = allusers.map((user) => (
+    let userCards = null;
 
+    userCards = allusers.map((user) => (
         <Fragment key={user.uid}>
             <div className="col-lg-4 col-md-6 col-sm-12 mt-3">
                 <div className="card">
@@ -44,7 +47,7 @@ function Feed() {
                                 </div>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                {user.displayName}'s Game Reviews
+                                {user.displayName}
                             </div>
                         </div>
                     </Link>
@@ -56,6 +59,7 @@ function Feed() {
     return (
         <>
             <div class="container mt-5">
+                <h4>Check out other users</h4>
                 <div class="row">{userCards}</div>
             </div>
         </>

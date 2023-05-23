@@ -9,7 +9,7 @@ function GameCards() {
     const [gamesId, setGamesId] = useState([]);
     const { currentUser } = useContext(AuthContext);
     let { id } = useParams();
-    let [isGamesDeleted, setIsGamesDeleted] = useState(false)
+    let [isGamesDeleted, setIsGamesDeleted] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,13 +17,11 @@ function GameCards() {
                 const allgames = [];
                 const allgamesid = [];
 
-                // get allgames from userid
                 const docsSnap = await getDocs(
                     collection(db, `allgames/${id}/games`)
                 );
                 docsSnap.forEach((doc) => {
                     if (doc.id != "default") {
-                        // games.push(doc.data());
                         allgames.push(doc.data());
                         allgamesid.push(doc.id);
                     }
@@ -39,36 +37,35 @@ function GameCards() {
         fetchData();
     }, [isGamesDeleted]);
 
+    console.log(gamesId);
+
     async function deleteGame(clickedId) {
         console.log(clickedId);
-        await deleteDoc(doc(db, `allgames/${currentUser.uid}/games`, clickedId))
+        await deleteDoc(
+            doc(db, `allgames/${currentUser.uid}/games`, clickedId)
+        );
 
-        if(isGamesDeleted == false)
-        {
-            setIsGamesDeleted(true)
+        if (isGamesDeleted == false) {
+            setIsGamesDeleted(true);
+        } else if (isGamesDeleted == true) {
+            setIsGamesDeleted(false);
         }
-        else if(isGamesDeleted == true)
-        {
-            setIsGamesDeleted(false)
-        }
-        
-
-        // window.location.reload();
     }
 
     function IsLoggedIn(i) {
-        // const { currentUser } = useContext(AuthContext);
-
         if (currentUser) {
-            if(currentUser.uid === id)
-            {
+            if (currentUser.uid === id) {
                 return (
                     <>
                         <div class="d-flex flex-row">
                             <div class="">
                                 <Link to={"/editreview/" + i.index}>
-                                    <button type="button" class="btn btn-primary">
-                                        Edit
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary"
+                                        title="edit"
+                                    >
+                                        <i class="bi bi-pencil-square"></i>
                                     </button>
                                 </Link>
                             </div>
@@ -78,41 +75,51 @@ function GameCards() {
                                     class="btn btn-danger"
                                     id={i.index}
                                     onClick={(e) => deleteGame(e.target.id)}
+                                    title="delete"
                                 >
-                                    Delete
+                                    <i class="bi bi-trash3"></i>
                                 </button>
                             </div>
                         </div>
                     </>
                 );
             }
-            
         }
     }
 
-    function RecommendationBadge(props){
-        
-        if(props.recommendation === "recommended")
-        {
-            return <p class="card-text badge rounded-pill text-bg-success">Recommended</p>
+    function RecommendationBadge(props) {
+        if (props.recommendation === "recommended") {
+            return (
+                <p class="card-text badge rounded-pill text-bg-success">
+                    Recommended
+                </p>
+            );
+        } else if (props.recommendation === "notRecommended") {
+            return (
+                <p class="card-text badge rounded-pill text-bg-danger">
+                    Not Recommended
+                </p>
+            );
+        } else if (props.recommendation === "mixed") {
+            return (
+                <p class="card-text badge rounded-pill text-bg-secondary">
+                    Mixed
+                </p>
+            );
         }
-        else if(props.recommendation === "notRecommended")
-        {
-            return <p class="card-text badge rounded-pill text-bg-danger">Not Recommended</p>
-        }
-
     }
 
     const gameCards = games.map((games, index) => (
         <Fragment key={index}>
-            {/* <div className="col-lg-4 col-md-6 col-sm-12 mt-3"> */}
-            <div className="col-12 mt-3">
+            <div className="col-12">
                 <div className="card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">{games.title}</h5>
                         <p className="card-text">Rating: {games.rating}/10</p>
                         <p className="card-text">Review: {games.review}</p>
-                        <RecommendationBadge recommendation={games.recommendation}></RecommendationBadge>
+                        <RecommendationBadge
+                            recommendation={games.recommendation}
+                        ></RecommendationBadge>
                         <IsLoggedIn index={gamesId[index]}></IsLoggedIn>
                     </div>
                 </div>
@@ -120,13 +127,15 @@ function GameCards() {
         </Fragment>
     ));
 
-    return (
-        <>
-            <div className="container mt-3 mb-5">
-                <div className="row">{gameCards}</div>
-            </div>
-        </>
-    );
+    if (games.length != 0) {
+        return (
+            <>
+                <div className="row gy-3">{gameCards}</div>
+            </>
+        );
+    } else {
+        return <>No reviews.</>;
+    }
 }
 
 export default GameCards;
