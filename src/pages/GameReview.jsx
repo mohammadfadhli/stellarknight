@@ -11,6 +11,7 @@ import {
     updateDoc,
 } from "firebase/firestore";
 import db from "../firebase";
+import FriendList from "../components/FriendList";
 
 function GameReview() {
     const { currentUser, friendsList } = useContext(AuthContext);
@@ -40,12 +41,20 @@ function GameReview() {
             friends: arrayUnion(id),
         });
 
+        await updateDoc(doc(db, "allgames", id), {
+            friends: arrayUnion(currentUser.uid),
+        });
+
         window.location.reload();
     }
 
     async function deleteFriend() {
         await updateDoc(doc(db, "allgames", currentUser.uid), {
             friends: arrayRemove(id),
+        });
+
+        await updateDoc(doc(db, "allgames", id), {
+            friends: arrayRemove(currentUser.uid),
         });
 
         window.location.reload();
@@ -143,6 +152,12 @@ function GameReview() {
                         <IsFriend></IsFriend>
                     </div>
                 </div>
+
+                <div class="container mb-3">
+                    <h3 style={{ margin: 0 }}>Friends</h3>
+                </div>
+
+                <FriendList></FriendList>
 
                 <div class="container mb-3">
                     <h3 style={{ margin: 0 }}>Game Reviews</h3>
