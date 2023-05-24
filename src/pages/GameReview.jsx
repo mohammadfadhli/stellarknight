@@ -19,6 +19,7 @@ function GameReview() {
     const [bio, setBio] = useState(null);
     const [displayName, setDisplayName] = useState("");
     const [country, setCountry] = useState("");
+    const [frenList, setFrenList] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,12 +30,14 @@ function GameReview() {
                     setBio(docSnap.data().bio);
                     setCountry(docSnap.data().location);
                     setDisplayName(docSnap.data().displayName);
+                    setFrenList(docSnap.data().friends)
                 }
             } catch {}
+
         };
 
         fetchData();
-    });
+    }, []);
 
     async function addFriend() {
         await updateDoc(doc(db, "allgames", currentUser.uid), {
@@ -157,7 +160,11 @@ function GameReview() {
                     <h3 style={{ margin: 0 }}>Friends</h3>
                 </div>
 
-                <FriendList></FriendList>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">{frenList.length} friends</h4>
+                    </div>
+                </div>
 
                 <div class="container mb-3">
                     <h3 style={{ margin: 0 }}>Game Reviews</h3>
