@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 
 function NavBarIsLoggedIn(props) {
-
     return (
         <>
             <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
@@ -27,7 +26,7 @@ function NavBarIsLoggedIn(props) {
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"/"}
                                     className="nav-link"
                                 >
@@ -36,7 +35,7 @@ function NavBarIsLoggedIn(props) {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"feed"}
                                     className="nav-link"
                                 >
@@ -45,20 +44,20 @@ function NavBarIsLoggedIn(props) {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"profile"}
                                     className="nav-link"
                                 >
-                                    Welcome back, {props.displayname}
+                                    Edit Profile
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={`games/${props.uid}`}
                                     className="nav-link"
                                 >
-                                    My Reviews
+                                    {props.displayname}
                                 </Link>
                             </li>
                             <li className="nav-item">
@@ -103,7 +102,7 @@ function NavBarIsLoggedOut() {
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"/"}
                                     className="nav-link"
                                 >
@@ -112,7 +111,7 @@ function NavBarIsLoggedOut() {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"feed"}
                                     className="nav-link"
                                 >
@@ -121,7 +120,7 @@ function NavBarIsLoggedOut() {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    reloadDocument
+                                    // reloadDocument
                                     to={"login"}
                                     className="nav-link"
                                 >
@@ -138,21 +137,25 @@ function NavBarIsLoggedOut() {
 }
 
 function NavBar() {
-    const { currentUser, isLoading, logOut, displayName } = useContext(AuthContext);
-    const [showName, setShowName] = useState(null)
+    const { currentUser, isLoading, logOut, displayName } =
+        useContext(AuthContext);
+    const [showName, setShowName] = useState(null);
 
     useEffect(() => {
-
-        if(currentUser)
-        {
-            setShowName(displayName)
+        if (currentUser) {
+            setShowName(displayName);
         }
-
-    },)
+    });
 
     if (!isLoading) {
         if (showName) {
-            return <NavBarIsLoggedIn displayname={showName} handleLogOut={logOut} uid={currentUser.uid}></NavBarIsLoggedIn>;
+            return (
+                <NavBarIsLoggedIn
+                    displayname={showName}
+                    handleLogOut={logOut}
+                    uid={currentUser.uid}
+                ></NavBarIsLoggedIn>
+            );
         } else {
             return <NavBarIsLoggedOut></NavBarIsLoggedOut>;
         }

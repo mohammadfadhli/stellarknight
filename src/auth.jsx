@@ -5,8 +5,10 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     updateProfile,
-    updateEmail
+    updateEmail,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import db from "./firebase.jsx";
 
 export const AuthContext = createContext();
 
@@ -14,6 +16,7 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [displayName, setDisplayName] = useState("");
+    const [friendsList, setFriendsList] = useState([]);
 
     function logOut() {
         return auth.signOut();
@@ -28,7 +31,7 @@ export function AuthProvider({ children }) {
     }
 
     function updateUserName(params) {
-        setDisplayName(params.displayName)
+        setDisplayName(params.displayName);
         return updateProfile(auth.currentUser, params);
     }
 
@@ -37,15 +40,22 @@ export function AuthProvider({ children }) {
     }
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // User is signed in, see docs for a list of available properties
                 // https://firebase.google.com/docs/reference/js/firebase.User
                 const uid = user.uid;
                 console.log(uid + " is signed in");
                 setCurrentUser(user);
-                setDisplayName(user.displayName)
+                setDisplayName(user.displayName);
                 setIsLoading(false);
+
+                const docSnap = await getDoc(doc(db, `allgames`, user.uid));
+
+                if (docSnap.exists()) {
+                    setFriendsList(docSnap.data().friends)
+                }
+
                 // ...
             } else {
                 // User is signed out
@@ -55,6 +65,7 @@ export function AuthProvider({ children }) {
             }
         });
     }, []);
+
 
     return (
         <AuthContext.Provider
@@ -66,7 +77,8 @@ export function AuthProvider({ children }) {
                 createUser,
                 updateUserName,
                 displayName,
-                updateUserEmail
+                updateUserEmail,
+                friendsList
             }}
         >
             {children}

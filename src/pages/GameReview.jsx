@@ -3,14 +3,21 @@ import GameCards from "../components/GameCards";
 import { AuthContext } from "../auth";
 import { Link, useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
-import { doc, getDoc } from "firebase/firestore";
+import {
+    arrayRemove,
+    arrayUnion,
+    doc,
+    getDoc,
+    updateDoc,
+} from "firebase/firestore";
 import db from "../firebase";
 
 function GameReview() {
-    const { currentUser } = useContext(AuthContext);
+    const { currentUser, friendsList } = useContext(AuthContext);
     const { id } = useParams();
     const [bio, setBio] = useState(null);
     const [displayName, setDisplayName] = useState("");
+    const [country, setCountry] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -19,6 +26,7 @@ function GameReview() {
 
                 if (docSnap.exists()) {
                     setBio(docSnap.data().bio);
+                    setCountry(docSnap.data().location);
                     setDisplayName(docSnap.data().displayName);
                 }
             } catch {}
@@ -26,6 +34,55 @@ function GameReview() {
 
         fetchData();
     });
+
+    async function addFriend() {
+        await updateDoc(doc(db, "allgames", currentUser.uid), {
+            friends: arrayUnion(id),
+        });
+
+        window.location.reload();
+    }
+
+    async function deleteFriend() {
+        await updateDoc(doc(db, "allgames", currentUser.uid), {
+            friends: arrayRemove(id),
+        });
+
+        window.location.reload();
+    }
+
+    function IsFriend() {
+        if (currentUser) {
+            if (currentUser.uid !== id) {
+                if (friendsList.includes(id)) {
+                    return (
+                        <>
+                            {" "}
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                onClick={deleteFriend}
+                            >
+                                <i class="bi bi-plus-circle"></i> Remove as Friend
+                            </button>
+                        </>
+                    );
+                } else {
+                    return (
+                        <>
+                            <button
+                                type="button"
+                                class="btn btn-success"
+                                onClick={addFriend}
+                            >
+                                <i class="bi bi-plus-circle"></i> Add as Friend
+                            </button>
+                        </>
+                    );
+                }
+            }
+        }
+    }
 
     function IsLoggedIn() {
         if (currentUser) {
@@ -56,6 +113,14 @@ function GameReview() {
         }
     }
 
+    function CountryComponent() {
+        if (country == "donotdisplay") {
+            return <></>;
+        } else {
+            return <>{country}</>;
+        }
+    }
+
     return (
         <>
             <div className="container mt-5">
@@ -65,28 +130,24 @@ function GameReview() {
                     </div>
                 </div>
 
-                <div class="row mt-5">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">{displayName}</h4>
-                                <p class="card-text">
-                                    <CheckBio></CheckBio>
-                                </p>
-                                <IsLoggedIn className="ms-auto"></IsLoggedIn>
-                            </div>
-                        </div>
+                <div class="card mb-3 mt-5">
+                    <div class="card-body">
+                        <h4 class="card-title">{displayName}</h4>
+                        <h6 class="card-subtitle mt-2 text-body-white">
+                            <CountryComponent></CountryComponent>
+                        </h6>
+                        <p class="card-text mt-3">
+                            <CheckBio></CheckBio>
+                        </p>
+                        <IsLoggedIn className="ms-auto"></IsLoggedIn>
+                        <IsFriend></IsFriend>
                     </div>
                 </div>
 
-                <div class="card my-3">
-                    <div class="card-body">
-                        <h4 class="card-title">Game Reviews</h4>
-                        <p class="card-text">
-                            <GameCards></GameCards>
-                        </p>
-                    </div>
+                <div class="container mb-3">
+                    <h3 style={{ margin: 0 }}>Game Reviews</h3>
                 </div>
+                <GameCards></GameCards>
             </div>
         </>
     );

@@ -1,5 +1,3 @@
-import DefaultCard from "../components/DefaultCard.jsx";
-import TimeLine from "../components/TimeLine.jsx";
 import Banner from "../components/Banner.jsx"
 
 const title = "Disclaimer";
@@ -10,8 +8,6 @@ function Home() {
     return (
         <>
             <Banner></Banner>
-            <DefaultCard title={title} text={text}></DefaultCard>
-            <TimeLine></TimeLine>
         </>
     );
 }

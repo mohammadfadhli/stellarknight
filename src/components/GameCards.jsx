@@ -22,13 +22,15 @@ function GameCards() {
                 );
                 docsSnap.forEach((doc) => {
                     if (doc.id != "default") {
-                        allgames.push(doc.data());
-                        allgamesid.push(doc.id);
+                        // allgames.push(doc.data());
+                        // allgamesid.push(doc.id);
+                        allgames.push(doc)
                     }
                 });
 
                 setGames(allgames);
                 setGamesId(allgamesid);
+                
             } catch (err) {
                 console.error(err);
             }
@@ -37,7 +39,6 @@ function GameCards() {
         fetchData();
     }, [isGamesDeleted]);
 
-    console.log(gamesId);
 
     async function deleteGame(clickedId) {
         console.log(clickedId);
@@ -50,6 +51,7 @@ function GameCards() {
         } else if (isGamesDeleted == true) {
             setIsGamesDeleted(false);
         }
+
     }
 
     function IsLoggedIn(i) {
@@ -73,7 +75,9 @@ function GameCards() {
                                     type="button"
                                     class="btn btn-danger"
                                     id={i.index}
-                                    onClick={(e) => deleteGame(e.currentTarget.id)}
+                                    onClick={(e) =>
+                                        deleteGame(e.currentTarget.id)
+                                    }
                                 >
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -109,30 +113,36 @@ function GameCards() {
 
     const gameCards = games.map((games, index) => (
         <Fragment key={index}>
-            <div className="col-12">
-                <div className="card" key={index}>
-                    <div className="card-body">
-                        <h5 className="card-title">{games.title}</h5>
-                        <p className="card-text">Rating: {games.rating}/10</p>
-                        <p className="card-text">Review: {games.review}</p>
-                        <RecommendationBadge
-                            recommendation={games.recommendation}
-                        ></RecommendationBadge>
-                        <IsLoggedIn index={gamesId[index]}></IsLoggedIn>
-                    </div>
+            <div className="card mb-3" key={index}>
+                <div className="card-body">
+                    <h5 className="card-title">{games.data().title}</h5>
+                    <p className="card-text">Rating: {games.data().rating}/10</p>
+                    <p className="card-text">Review: {games.data().review}</p>
+                    <RecommendationBadge
+                        recommendation={games.data().recommendation}
+                    ></RecommendationBadge>
+                    {/* <IsLoggedIn index={gamesId[index]}></IsLoggedIn> */}
+                    <IsLoggedIn index={games.id}></IsLoggedIn>
                 </div>
             </div>
         </Fragment>
     ));
 
+
     if (games.length != 0) {
         return (
             <>
-                <div className="row gy-3">{gameCards}</div>
+                {gameCards}
             </>
         );
     } else {
-        return <>No reviews.</>;
+        return (
+            <>
+                <div className="card">
+                    <div className="card-body">No reviews.</div>
+                </div>
+            </>
+        );
     }
 }
 

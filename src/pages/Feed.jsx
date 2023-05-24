@@ -8,7 +8,7 @@ import { AuthContext } from "../auth.jsx";
 function Feed() {
     const [allusers, setAllUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {currentUser} = useContext(AuthContext)
+    const {currentUser, friendsList} = useContext(AuthContext)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -44,6 +44,7 @@ function Feed() {
     }, []);
 
     console.log(allusers);
+    console.log("friends: " + friendsList);
 
     let userCards = null;
 
@@ -56,8 +57,8 @@ function Feed() {
                             <div class="flex-shrink-0">
                                 <div class="container my-2">
                                     <img
-                                        class="rounded"
-                                        src={user.profilepicture}
+                                        class="rounded border border-black"
+                                        src={user.profilepicture} style={{width: 60}}
                                     ></img>
                                 </div>
                             </div>
