@@ -28,13 +28,13 @@ function IsLoggedOut() {
                     friends: [],
                     profilepicture: "https://firebasestorage.googleapis.com/v0/b/stellarknight2-eddf1.appspot.com/o/users%2Fdefaultdp.png?alt=media&token=979791e0-ff90-40b7-ab8c-38f2579a05cb"
                 }).then(() => {
-                    const docRef = doc(db, "allgames", user.uid);
-                    const colRef = collection(docRef, "games");
-                    setDoc(doc(colRef, "default"), {
-                        title: "title",
-                        rating: "rating",
-                        review: "review",
-                    });
+                    // const docRef = doc(db, "allgames", user.uid);
+                    // const colRef = collection(docRef, "games");
+                    // setDoc(doc(colRef, "default"), {
+                    //     title: "title",
+                    //     rating: "rating",
+                    //     review: "review",
+                    // });
                 });
             });
             await updateUserName({ displayName: username });

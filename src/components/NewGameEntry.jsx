@@ -28,7 +28,7 @@ function NewGameEntry() {
         });
 
         console.log("Document written with ID: ", docRef.id);
-        navigate(`/games/${currentUser.uid}`);
+        navigate(`/profilepage/${currentUser.uid}`);
     }
 
     return (

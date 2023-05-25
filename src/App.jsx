@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import Feed from "./pages/Feed.jsx"
 import Profile from "./pages/Profile.jsx";
 import FriendList from "./components/FriendList.jsx";
+import GameReviews from "./pages/GameReviews.jsx";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
             {
                 path: "profilepage/:id",
                 element: <ProfilePage></ProfilePage>
+            },
+            {
+                path: "reviews/:id",
+                element: <GameReviews></GameReviews>
             },
             {
                 path: "friends/:id",
