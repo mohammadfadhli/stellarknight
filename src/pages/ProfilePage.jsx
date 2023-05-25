@@ -11,9 +11,9 @@ import {
     updateDoc,
 } from "firebase/firestore";
 import db from "../firebase";
-import FriendList from "../components/FriendList";
+import Posts from "../components/Posts";
 
-function GameReview() {
+function ProfilePage() {
     const { currentUser, friendsList } = useContext(AuthContext);
     const { id } = useParams();
     const [bio, setBio] = useState(null);
@@ -133,6 +133,17 @@ function GameReview() {
         }
     }
 
+    function DisplayFriends(){
+        if(frenList.length == 1)
+        {
+            return <>{frenList.length} friend</>
+        }
+        else
+        {
+            return <>{frenList.length} friends</>
+        }
+    }
+
     return (
         <>
             <div className="container mt-5">
@@ -160,19 +171,26 @@ function GameReview() {
                     <h3 style={{ margin: 0 }}>Friends</h3>
                 </div>
 
+                <Link to={"/friends/" + id} style={{textDecoration: "none"}}>
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h4 class="card-title">{frenList.length} friends</h4>
+                        <h4 class="card-text"><DisplayFriends></DisplayFriends></h4>
                     </div>
                 </div>
-
+                </Link>
+                
                 <div class="container mb-3">
                     <h3 style={{ margin: 0 }}>Game Reviews</h3>
                 </div>
                 <GameCards></GameCards>
+
+                <div class="container mb-3">
+                    <h3 style={{ margin: 0 }}>Timeline</h3>
+                </div>
+                <Posts></Posts>
             </div>
         </>
     );
 }
 
-export default GameReview;
+export default ProfilePage;

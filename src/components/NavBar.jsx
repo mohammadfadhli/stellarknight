@@ -26,7 +26,7 @@ function NavBarIsLoggedIn(props) {
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"/"}
                                     className="nav-link"
                                 >
@@ -35,7 +35,7 @@ function NavBarIsLoggedIn(props) {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"feed"}
                                     className="nav-link"
                                 >
@@ -44,7 +44,7 @@ function NavBarIsLoggedIn(props) {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"profile"}
                                     className="nav-link"
                                 >
@@ -53,8 +53,8 @@ function NavBarIsLoggedIn(props) {
                             </li>
                             <li className="nav-item">
                                 <Link
-                                    // reloadDocument
-                                    to={`games/${props.uid}`}
+                                    reloadDocument
+                                    to={`profilepage/${props.uid}`}
                                     className="nav-link"
                                 >
                                     {props.displayname}
@@ -102,7 +102,7 @@ function NavBarIsLoggedOut() {
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"/"}
                                     className="nav-link"
                                 >
@@ -111,7 +111,7 @@ function NavBarIsLoggedOut() {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"feed"}
                                     className="nav-link"
                                 >
@@ -120,7 +120,7 @@ function NavBarIsLoggedOut() {
                             </li>
                             <li class="nav-item">
                                 <Link
-                                    // reloadDocument
+                                    reloadDocument
                                     to={"login"}
                                     className="nav-link"
                                 >

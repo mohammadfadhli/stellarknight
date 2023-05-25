@@ -9,9 +9,10 @@ import EditGameReview from "./pages/EditGameReview.jsx";
 import ProtectedRoutes from "./routes/protectedroutes.jsx";
 import AnonymousRoute from "./routes/anonymousroute.jsx";
 import Error from "./components/Error.jsx";
-import GameReview from "./pages/GameReview.jsx"
+import ProfilePage from "./pages/ProfilePage.jsx";
 import Feed from "./pages/Feed.jsx"
 import Profile from "./pages/Profile.jsx";
+import FriendList from "./components/FriendList.jsx";
 
 const router = createBrowserRouter([
     {
@@ -58,10 +59,13 @@ const router = createBrowserRouter([
                 element: <Error></Error> // show 404 error page if path doesn't exist
             },
             {
-                path: "games/:id",
-                element: <GameReview></GameReview>
-            }
-            ,
+                path: "profilepage/:id",
+                element: <ProfilePage></ProfilePage>
+            },
+            {
+                path: "friends/:id",
+                element: <FriendList></FriendList>
+            },
             {
                 path: "feed",
                 element: <Feed></Feed>
