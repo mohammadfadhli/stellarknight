@@ -2,10 +2,12 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import db from "../firebase";
+import { useParams } from "react-router-dom";
 
 function Posts() {
     const { currentUser } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
+    const {id} = useParams()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -13,7 +15,7 @@ function Posts() {
             const tempArr = []
 
             const querySnapshot = await getDocs(
-                collection(db, `posts/${currentUser.uid}/posts`)
+                collection(db, `posts/${id}/posts`)
             );
             querySnapshot.forEach((doc) => {
                 console.log(doc.id, " => ", doc.data());
