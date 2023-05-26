@@ -4,7 +4,6 @@ import { getDocs, collection } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import "../styles/CardStyle.css";
 import { AuthContext } from "../auth.jsx";
-import Posts from "../components/Posts.jsx";
 import AddPost from "../components/AddPost.jsx";
 
 function Feed() {
@@ -51,7 +50,7 @@ function Feed() {
                             <div class="flex-shrink-0">
                                 <div class="container my-2">
                                     <img
-                                        class="rounded border border-black"
+                                        class="rounded"
                                         src={user.profilepicture}
                                         style={{ width: 60 }}
                                     ></img>

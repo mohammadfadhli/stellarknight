@@ -49,7 +49,7 @@ function FriendList(props) {
                             <div class="flex-shrink-0">
                                 <div class="container my-2">
                                     <img
-                                        class="rounded border border-black"
+                                        class="rounded"
                                         src={fren.profilepicture}
                                         style={{ width: 60 }}
                                     ></img>

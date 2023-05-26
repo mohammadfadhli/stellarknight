@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import db from "../firebase";
 
 function AddPost() {
@@ -14,6 +14,7 @@ function AddPost() {
 
         await addDoc(collection(db, `posts/${currentUser.uid}/posts`), {
             text: postText,
+            posted_at: serverTimestamp()
         });
 
         setPostAdded(true);
