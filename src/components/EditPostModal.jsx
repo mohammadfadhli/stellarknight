@@ -8,9 +8,9 @@ import db from "../firebase";
 
 function DefaultModal(props) {
     const [show, setShow] = useState(false);
-    // const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const {currentUser} = useContext(AuthContext)
+    const [isLoading, setIsLoading] = useState(true)
 
     const [newData, setNewData] = useState(props.postdata.data().text)
 
@@ -21,10 +21,17 @@ function DefaultModal(props) {
             posted_at: serverTimestamp()
         })
 
+        setIsLoading(false)
+        props.updatePostFunc()
+
+    }
+
+    function handleSave(){
+        updatePost()
+        setShow(false)
     }
 
     function handleClose(){
-        updatePost()
         setShow(false)
     }
 
@@ -34,14 +41,13 @@ function DefaultModal(props) {
                 <i class="bi bi-pencil-square"></i>
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title style={{color: "black"}}>{props.postdata.id}</Modal.Title>
+                    <Modal.Title style={{color: "black"}}>Edit post</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Form.Group
-                            className="mb-3"
                             controlId="exampleForm.ControlTextarea1"
                         >
                             <Form.Control as="textarea" rows={3} value={newData} onChange={(e) => {setNewData(e.target.value)}}/>
@@ -49,11 +55,8 @@ function DefaultModal(props) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                    <Button variant="primary" onClick={handleSave} className="col">
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>

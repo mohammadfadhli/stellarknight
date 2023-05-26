@@ -6,10 +6,12 @@ import {
     doc,
     getDoc,
     getDocs,
+    orderBy,
+    query
 } from "firebase/firestore";
 import db from "../firebase";
-import { Link, useParams } from "react-router-dom";
-import DefaultModal from "./Modal";
+import { useParams } from "react-router-dom";
+import DefaultModal from "./EditPostModal";
 
 function Posts() {
     const { currentUser } = useContext(AuthContext);
@@ -17,16 +19,21 @@ function Posts() {
     const [displayName, setDisplayName] = useState("");
     const [profilepicture, setProfilePicture] = useState("");
     const { id } = useParams();
+    let [isPostDeleted, setIsPostDeleted] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const tempArr = [];
 
+            const q = query(collection(db, `posts/${id}/posts`), orderBy('posted_at', 'desc')); // get posts from db and sort by desc timestamp
+
             const querySnapshot = await getDocs(
-                collection(db, `posts/${id}/posts`)
+                q
             );
+
             querySnapshot.forEach((doc) => {
                 tempArr.push(doc);
+                // console.log(doc)
             });
 
             const docSnap = await getDoc(doc(db, `allgames`, id));
@@ -40,7 +47,7 @@ function Posts() {
         };
 
         fetchData();
-    }, []);
+    }, [isPostDeleted]);
 
     function PostDate(props) {
         const monthNames = [
@@ -74,9 +81,22 @@ function Posts() {
     async function deletePost(clickedId) {
         await deleteDoc(doc(db, `posts/${currentUser.uid}/posts`, clickedId));
 
-        window.location.reload();
+        if (isPostDeleted == false) {
+            setIsPostDeleted(true);
+        } else if (isPostDeleted == true) {
+            setIsPostDeleted(false);
+        }
+
+        // window.location.reload();
     }
 
+    function updatePost() {
+        if (isPostDeleted == false) {
+            setIsPostDeleted(true);
+        } else if (isPostDeleted == true) {
+            setIsPostDeleted(false);
+        }
+    }
 
     function IsOwner(i) {
         if (currentUser) {
@@ -88,7 +108,10 @@ function Posts() {
                                 {/* <button type="button" class="btn btn-primary">
                                     <i class="bi bi-pencil-square"></i>
                                 </button> */}
-                                <DefaultModal postdata={i.index}></DefaultModal>
+                                <DefaultModal
+                                    postdata={i.index}
+                                    updatePostFunc={updatePost}
+                                ></DefaultModal>
                             </div>
                             <div class="ps-3">
                                 <button
