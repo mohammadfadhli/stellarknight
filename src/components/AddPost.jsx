@@ -11,6 +11,7 @@ function AddPost() {
     async function addPost(e) {
         e.preventDefault();
         console.log("TEST");
+        setPostText("")
 
         await addDoc(collection(db, `posts/${currentUser.uid}/posts`), {
             text: postText,
@@ -49,18 +50,16 @@ function AddPost() {
                     addPost(e);
                 }}
             >
-                <div class="form-floating">
+                <div class="">
                     <textarea
                         class="form-control"
-                        placeholder="Leave a comment here"
+                        placeholder="What's on your mind?"
                         id="floatingTextarea"
+                        value={postText}
                         onChange={(e) => {
                             setPostText(e.target.value);
                         }}
                     ></textarea>
-                    <label for="floatingTextarea" style={{ color: "black" }}>
-                        What's on your mind?
-                    </label>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">
                     Post

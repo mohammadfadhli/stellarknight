@@ -1,8 +1,15 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+} from "firebase/firestore";
 import db from "../firebase";
 import { Link, useParams } from "react-router-dom";
+import DefaultModal from "./Modal";
 
 function Posts() {
     const { currentUser } = useContext(AuthContext);
@@ -19,7 +26,6 @@ function Posts() {
                 collection(db, `posts/${id}/posts`)
             );
             querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
                 tempArr.push(doc);
             });
 
@@ -35,8 +41,6 @@ function Posts() {
 
         fetchData();
     }, []);
-
-    console.log(posts);
 
     function PostDate(props) {
         const monthNames = [
@@ -67,35 +71,83 @@ function Posts() {
         );
     }
 
+    async function deletePost(clickedId) {
+        await deleteDoc(doc(db, `posts/${currentUser.uid}/posts`, clickedId));
+
+        window.location.reload();
+    }
+
+
+    function IsOwner(i) {
+        if (currentUser) {
+            if (currentUser.uid === id) {
+                return (
+                    <>
+                        <div class="d-flex flex-row mb-3">
+                            <div class="">
+                                {/* <button type="button" class="btn btn-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button> */}
+                                <DefaultModal postdata={i.index}></DefaultModal>
+                            </div>
+                            <div class="ps-3">
+                                <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    id={i.index.id}
+                                    onClick={(e) =>
+                                        deletePost(e.currentTarget.id)
+                                    }
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                );
+            }
+        }
+    }
+
     const postCards = posts.map((post) => (
         <Fragment key={post.id}>
             <div className="col mb-3">
                 <div className="card">
-                    <Link to={"/profilepage/" + post.id} class="testcard">
-                        <div class="d-flex align-items-center ">
-                            <div class="flex-shrink-0">
-                                <div class="container my-2">
-                                    <img
-                                        class="rounded"
-                                        src={profilepicture}
-                                        style={{ width: 60 }}
-                                    ></img>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-1 mt-3">
-                                <h5>{displayName}</h5>
-                                <PostDate postdate={post.data().posted_at}></PostDate>
-                                <p>{post.data().text}</p>
-                                
+                    <div class="d-flex align-items-center ">
+                        <div class="flex-shrink-0">
+                            <div class="container my-2">
+                                <img
+                                    class="rounded"
+                                    src={profilepicture}
+                                    style={{ width: 60 }}
+                                ></img>
                             </div>
                         </div>
-                    </Link>
+                        <div class="flex-grow-1 ms-1 mt-3">
+                            <h5>{displayName}</h5>
+                            <PostDate
+                                postdate={post.data().posted_at}
+                            ></PostDate>
+                            <p>{post.data().text}</p>
+                            <IsOwner index={post}></IsOwner>
+                        </div>
+                    </div>
                 </div>
             </div>
         </Fragment>
     ));
 
-    return <>{postCards}</>;
+    if (posts.length != 0) {
+        return <>{postCards}</>;
+    } else {
+        return (
+            <>
+                <div className="card mb-3">
+                    <div className="card-body">Nothing to see here.</div>
+                </div>
+            </>
+        );
+    }
 }
 
 export default Posts;

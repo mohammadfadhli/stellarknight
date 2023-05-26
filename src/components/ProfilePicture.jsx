@@ -13,20 +13,16 @@ function ProfilePicture(props) {
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-                    console.log("Document data:", docSnap.data());
                     setUserPic(docSnap.data().profilepicture);
                     setIsLoading(false);
                 } else {
                     // docSnap.data() will be undefined in this case
-                    console.log("No such document!");
                 }
             } catch {}
         };
 
         fetchData();
     });
-
-    console.log(userPic);
 
     if (isLoading == false) {
         return (

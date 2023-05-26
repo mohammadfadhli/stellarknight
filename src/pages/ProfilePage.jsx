@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import GameCards from "../components/GameCards";
 import { AuthContext } from "../auth";
 import { Link, useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
@@ -46,7 +45,6 @@ function ProfilePage() {
             try {
                 const coll = collection(db, `allgames/${id}/games`);
                 const snapshot = await getCountFromServer(coll);
-                console.log("count: ", snapshot.data().count);
                 setNumOfreviews(snapshot.data().count);
             } catch {}
         };
