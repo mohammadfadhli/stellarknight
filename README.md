@@ -30,15 +30,15 @@ https://stellarknight-2c9e6.web.app/
 
 ### Installation
 
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/mohammadfadhli/stellarknight.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    npm install
    ```
-4. Run the application
+3. Run the application
    ```sh
    npm run dev
    ```
