@@ -1,17 +1,20 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
 import {
+    arrayUnion,
     collection,
     deleteDoc,
     doc,
     getDoc,
     getDocs,
     orderBy,
-    query
+    query,
+    updateDoc,
 } from "firebase/firestore";
 import db from "../firebase";
 import { useParams } from "react-router-dom";
 import DefaultModal from "./EditPostModal";
+import AddPost from "./AddPost";
 
 function Posts() {
     const { currentUser } = useContext(AuthContext);
@@ -20,20 +23,24 @@ function Posts() {
     const [profilepicture, setProfilePicture] = useState("");
     const { id } = useParams();
     let [isPostDeleted, setIsPostDeleted] = useState(false);
+    const [inputData, setInputData] = useState([]);
+    const [currentUserPic, setCurrentUserPic] = useState("");
+    const [postText, setPostText] = useState("");
+    const [postAdded, setPostAdded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const tempArr = [];
 
-            const q = query(collection(db, `posts/${id}/posts`), orderBy('posted_at', 'desc')); // get posts from db and sort by desc timestamp
+            const q = query(
+                collection(db, `posts/${id}/posts`),
+                orderBy("posted_at", "desc")
+            ); // get posts from db and sort by desc timestamp
 
-            const querySnapshot = await getDocs(
-                q
-            );
+            const querySnapshot = await getDocs(q);
 
             querySnapshot.forEach((doc) => {
                 tempArr.push(doc);
-                // console.log(doc)
             });
 
             const docSnap = await getDoc(doc(db, `allgames`, id));
@@ -44,6 +51,16 @@ function Posts() {
             }
 
             setPosts(tempArr);
+
+            if (currentUser) {
+                const docTref = await getDoc(
+                    doc(db, `allgames`, currentUser.uid)
+                );
+
+                if (docTref.exists()) {
+                    setCurrentUserPic(docSnap.data().profilepicture);
+                }
+            }
         };
 
         fetchData();
@@ -132,6 +149,66 @@ function Posts() {
         }
     }
 
+    async function addPost(e) {
+        e.preventDefault();
+        console.log("TEST");
+        setPostText("")
+
+        await addDoc(collection(db, `posts/${currentUser.uid}/posts`), {
+            text: postText,
+            posted_at: serverTimestamp(),
+            comments: []
+        });
+
+        setPostAdded(true);
+    }
+
+    useEffect(() => {
+        if (postAdded) {
+            const toRef = setTimeout(() => {
+                setPostAdded(false);
+                clearTimeout(toRef);
+            }, 1500);
+        }
+    }, [postAdded]);
+
+    function ShowAlert() {
+        if (postAdded) {
+            return (
+                <>
+                    <div class="alert alert-success mt-3" role="alert">
+                        Successfully Posted!
+                    </div>
+                </>
+            );
+        }
+    }
+
+    function IsLoggedInPost(){
+        return <><form
+        class="mt-3 mb-3"
+        onSubmit={(e) => {
+            addPost(e);
+        }}
+    >
+        <div class="">
+            <textarea
+                class="form-control"
+                placeholder="What's on your mind?"
+                id="floatingTextarea"
+                value={postText}
+                onChange={(e) => {
+                    setPostText(e.target.value);
+                }}
+            ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">
+            Post
+        </button>
+        <ShowAlert></ShowAlert>
+    </form></>
+    }
+
     const postCards = posts.map((post) => (
         <Fragment key={post.id}>
             <div className="col mb-3">
@@ -151,9 +228,11 @@ function Posts() {
                             <PostDate
                                 postdate={post.data().posted_at}
                             ></PostDate>
-                            <p>{post.data().text}</p>
-                            <IsOwner index={post}></IsOwner>
                         </div>
+                    </div>
+                    <div class="card-body">
+                        <p>{post.data().text}</p>
+                        <IsOwner index={post}></IsOwner>
                     </div>
                 </div>
             </div>

@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import db from "../firebase";
 import Posts from "../components/Posts";
+import AddPost from "../components/AddPost";
 
 function ProfilePage() {
     const { currentUser, friendsList } = useContext(AuthContext);
@@ -22,6 +23,7 @@ function ProfilePage() {
     const [country, setCountry] = useState("");
     const [frenList, setFrenList] = useState([]);
     const [numOfReviews, setNumOfreviews] = useState("");
+    const [postAdded, setPostAdded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -160,6 +162,14 @@ function ProfilePage() {
             return <>{numOfReviews} review</>;
         } else {
             return <>{numOfReviews} reviews</>;
+        }
+    }
+
+    function newPostAdded(){
+        if (isPostDeleted == false) {
+            setIsPostDeleted(true);
+        } else if (isPostDeleted == true) {
+            setIsPostDeleted(false);
         }
     }
 

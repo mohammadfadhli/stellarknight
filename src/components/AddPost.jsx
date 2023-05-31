@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth";
-import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import db from "../firebase";
 
-function AddPost() {
+function AddPost(props) {
     const { currentUser } = useContext(AuthContext);
     const [postText, setPostText] = useState("");
     const [postAdded, setPostAdded] = useState(false);
@@ -15,7 +15,8 @@ function AddPost() {
 
         await addDoc(collection(db, `posts/${currentUser.uid}/posts`), {
             text: postText,
-            posted_at: serverTimestamp()
+            posted_at: serverTimestamp(),
+            comments: []
         });
 
         setPostAdded(true);
@@ -45,12 +46,12 @@ function AddPost() {
     return (
         <>
             <form
-                class="mt-5 mb-3"
+                classname="mt-3 mb-3"
                 onSubmit={(e) => {
                     addPost(e);
                 }}
             >
-                <div class="">
+                <div classname="">
                     <textarea
                         class="form-control"
                         placeholder="What's on your mind?"
